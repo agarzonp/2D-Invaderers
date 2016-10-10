@@ -185,6 +185,10 @@ namespace octet {
       UpdateWindow (window_handle);
     }
 
+	void simulate() {
+		simulate_world();
+	}
+
     void render() {
       HDC hdc = GetDC(window_handle);
       wglMakeCurrent (hdc, gl_context);
@@ -344,7 +348,11 @@ namespace octet {
         for (int i = 0; i != m.size(); ++i) {
           // note: because Win8 generates an invisible window, we need to check m.value(i)
           if (m.get_key(i) && m.get_value(i)) {
-            m.get_value(i)->render();
+
+			  octet::app* app = m.get_value(i);
+
+			  app->simulate();
+			  app->render();
           }
         }
 

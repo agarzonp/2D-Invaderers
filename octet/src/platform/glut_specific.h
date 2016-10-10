@@ -79,6 +79,10 @@ namespace octet {
       app_init();
     }
 
+	void simulate() {
+		simulate_world();
+	}
+
     void render() {
       begin_frame();
 

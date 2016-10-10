@@ -208,6 +208,31 @@ namespace octet {
 
     ALuint get_sound_source() { return sources[cur_source++ % num_sound_sources]; }
 
+	// called every frame to move things
+	void simulate() {
+		if (game_over) {
+			return;
+		}
+
+		move_ship();
+
+		fire_missiles();
+
+		fire_bombs();
+
+		move_missiles();
+
+		move_bombs();
+
+		move_invaders(invader_velocity, 0);
+
+		sprite &border = sprites[first_border_sprite + (invader_velocity < 0 ? 2 : 3)];
+		if (invaders_collide(border)) {
+			invader_velocity = -invader_velocity;
+			move_invaders(invader_velocity, -0.1f);
+		}
+	}
+
     // called when we hit an enemy
     void on_hit_invaderer() {
       ALuint source = get_sound_source();
@@ -415,6 +440,8 @@ namespace octet {
 
     // this is called once OpenGL is initialized
     void app_init() {
+		// FIXME: Instance GameStateMachine and call GameStateMachine::SetState
+
       // set up the shader
       texture_shader_.init();
 
@@ -479,40 +506,20 @@ namespace octet {
       score = 0;
     }
 
-    // called every frame to move things
-    void simulate() {
-      if (game_over) {
-        return;
-      }
-
-      move_ship();
-
-      fire_missiles();
-
-      fire_bombs();
-
-      move_missiles();
-
-      move_bombs();
-
-      move_invaders(invader_velocity, 0);
-
-      sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 2 : 3)];
-      if (invaders_collide(border)) {
-        invader_velocity = -invader_velocity;
-        move_invaders(invader_velocity, -0.1f);
-      }
-    }
+	// this is called to simulate the world
+	void simulate_world() {
+		// FIXME: Call GameStateMachine::Update
+		simulate();
+	}
 
     // this is called to draw the world
     void draw_world(int x, int y, int w, int h) {
-      simulate();
 
       // set a viewport - includes whole window area
       glViewport(x, y, w, h);
 
       // clear the background to black
-      glClearColor(0, 0, 0, 1);
+      glClearColor(1, 0, 0, 1);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // don't allow Z buffer depth testing (closer objects are always drawn in front of far ones)
@@ -521,7 +528,8 @@ namespace octet {
       // allow alpha blend (transparency when alpha channel is 0)
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	  
+	  // FIXME: Call GameStateMachine::Render
       // draw all the sprites
       for (int i = 0; i != num_sprites; ++i) {
         sprites[i].render(texture_shader_, cameraToWorld);
