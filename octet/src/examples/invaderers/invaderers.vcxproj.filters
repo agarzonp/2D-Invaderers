@@ -33,13 +33,22 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{22786083-47af-48b2-98c4-2963f667bc44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\states">
+    <Filter Include="Source Files\metagame">
+      <UniqueIdentifier>{4c94e858-41bd-4d53-95cc-daea6a2739eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gamestates">
       <UniqueIdentifier>{cd03a7e3-8a2f-4aaf-9b36-deee3967fa4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateMachine.cpp">
+      <Filter>Source Files\metagame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source Files\gamestates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,6 +441,12 @@
     </ClInclude>
     <ClInclude Include="invaderers_app.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateMachine.h">
+      <Filter>Source Files\metagame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Source Files\gamestates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

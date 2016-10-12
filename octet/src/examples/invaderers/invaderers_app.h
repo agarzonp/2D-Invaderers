@@ -18,125 +18,143 @@
 //
 
 namespace octet {
-  class sprite {
-    // where is our sprite (overkill for a 2D game!)
-    mat4t modelToWorld;
 
-    // half the width of the sprite
-    float halfWidth;
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // half the height of the sprite
-    float halfHeight;
+	class sprite {
+		// where is our sprite (overkill for a 2D game!)
+		mat4t modelToWorld;
 
-    // what texture is on our sprite
-    int texture;
+		// half the width of the sprite
+		float halfWidth;
 
-    // true if this sprite is enabled.
-    bool enabled;
-  public:
-    sprite() {
-      texture = 0;
-      enabled = true;
-    }
+		// half the height of the sprite
+		float halfHeight;
 
-    void init(int _texture, float x, float y, float w, float h) {
-      modelToWorld.loadIdentity();
-      modelToWorld.translate(x, y, 0);
-      halfWidth = w * 0.5f;
-      halfHeight = h * 0.5f;
-      texture = _texture;
-      enabled = true;
-    }
+		// what texture is on our sprite
+		int texture;
 
-    void render(texture_shader &shader, mat4t &cameraToWorld) {
-      // invisible sprite... used for gameplay.
-      if (!texture) return;
+		// true if this sprite is enabled.
+		bool enabled;
+	public:
+		sprite() {
+			texture = 0;
+			enabled = true;
+		}
 
-      // build a projection matrix: model -> world -> camera -> projection
-      // the projection space is the cube -1 <= x/w, y/w, z/w <= 1
-      mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
+		void init(int _texture, float x, float y, float w, float h) {
+			modelToWorld.loadIdentity();
+			modelToWorld.translate(x, y, 0);
+			halfWidth = w * 0.5f;
+			halfHeight = h * 0.5f;
+			texture = _texture;
+			enabled = true;
+		}
 
-      // set up opengl to draw textured triangles using sampler 0 (GL_TEXTURE0)
-      glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_2D, texture);
+		void render(texture_shader &shader, mat4t &cameraToWorld) {
+			// invisible sprite... used for gameplay.
+			if (!texture) return;
 
-      // use "old skool" rendering
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-      //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      shader.render(modelToProjection, 0);
+			// build a projection matrix: model -> world -> camera -> projection
+			// the projection space is the cube -1 <= x/w, y/w, z/w <= 1
+			mat4t modelToProjection = mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
 
-      // this is an array of the positions of the corners of the sprite in 3D
-      // a straight "float" here means this array is being generated here at runtime.
-      float vertices[] = {
-        -halfWidth, -halfHeight, 0,
-         halfWidth, -halfHeight, 0,
-         halfWidth,  halfHeight, 0,
-        -halfWidth,  halfHeight, 0,
-      };
+			// set up opengl to draw textured triangles using sampler 0 (GL_TEXTURE0)
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture);
 
-      // attribute_pos (=0) is position of each corner
-      // each corner has 3 floats (x, y, z)
-      // there is no gap between the 3 floats and hence the stride is 3*sizeof(float)
-      glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)vertices );
-      glEnableVertexAttribArray(attribute_pos);
-    
-      // this is an array of the positions of the corners of the texture in 2D
-      static const float uvs[] = {
-         0,  0,
-         1,  0,
-         1,  1,
-         0,  1,
-      };
+			// use "old skool" rendering
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			shader.render(modelToProjection, 0);
 
-      // attribute_uv is position in the texture of each corner
-      // each corner (vertex) has 2 floats (x, y)
-      // there is no gap between the 2 floats and hence the stride is 2*sizeof(float)
-      glVertexAttribPointer(attribute_uv, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)uvs );
-      glEnableVertexAttribArray(attribute_uv);
-    
-      // finally, draw the sprite (4 vertices)
-      glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    }
+			// this is an array of the positions of the corners of the sprite in 3D
+			// a straight "float" here means this array is being generated here at runtime.
+			float vertices[] = {
+			  -halfWidth, -halfHeight, 0,
+			   halfWidth, -halfHeight, 0,
+			   halfWidth,  halfHeight, 0,
+			  -halfWidth,  halfHeight, 0,
+			};
 
-    // move the object
-    void translate(float x, float y) {
-      modelToWorld.translate(x, y, 0);
-    }
+			// attribute_pos (=0) is position of each corner
+			// each corner has 3 floats (x, y, z)
+			// there is no gap between the 3 floats and hence the stride is 3*sizeof(float)
+			glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)vertices);
+			glEnableVertexAttribArray(attribute_pos);
 
-    // position the object relative to another.
-    void set_relative(sprite &rhs, float x, float y) {
-      modelToWorld = rhs.modelToWorld;
-      modelToWorld.translate(x, y, 0);
-    }
+			// this is an array of the positions of the corners of the texture in 2D
+			static const float uvs[] = {
+			   0,  0,
+			   1,  0,
+			   1,  1,
+			   0,  1,
+			};
 
-    // return true if this sprite collides with another.
-    // note the "const"s which say we do not modify either sprite
-    bool collides_with(const sprite &rhs) const {
-      float dx = rhs.modelToWorld[3][0] - modelToWorld[3][0];
-      float dy = rhs.modelToWorld[3][1] - modelToWorld[3][1];
+			// attribute_uv is position in the texture of each corner
+			// each corner (vertex) has 2 floats (x, y)
+			// there is no gap between the 2 floats and hence the stride is 2*sizeof(float)
+			glVertexAttribPointer(attribute_uv, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)uvs);
+			glEnableVertexAttribArray(attribute_uv);
 
-      // both distances have to be under the sum of the halfwidths
-      // for a collision
-      return
-        (fabsf(dx) < halfWidth + rhs.halfWidth) &&
-        (fabsf(dy) < halfHeight + rhs.halfHeight)
-      ;
-    }
+			// finally, draw the sprite (4 vertices)
+			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		}
 
-    bool is_above(const sprite &rhs, float margin) const {
-      float dx = rhs.modelToWorld[3][0] - modelToWorld[3][0];
+		// move the object
+		void translate(float x, float y) {
+			modelToWorld.translate(x, y, 0);
+		}
 
-      return
-        (fabsf(dx) < halfWidth + margin)
-      ;
-    }
+		// position the object relative to another.
+		void set_relative(sprite &rhs, float x, float y) {
+			modelToWorld = rhs.modelToWorld;
+			modelToWorld.translate(x, y, 0);
+		}
 
-    bool &is_enabled() {
-      return enabled;
-    }
-  };
+		// return true if this sprite collides with another.
+		// note the "const"s which say we do not modify either sprite
+		bool collides_with(const sprite &rhs) const {
+			float dx = rhs.modelToWorld[3][0] - modelToWorld[3][0];
+			float dy = rhs.modelToWorld[3][1] - modelToWorld[3][1];
 
-  class invaderers_app : public octet::app {
+			// both distances have to be under the sum of the halfwidths
+			// for a collision
+			return
+				(fabsf(dx) < halfWidth + rhs.halfWidth) &&
+				(fabsf(dy) < halfHeight + rhs.halfHeight)
+				;
+		}
+
+		bool is_above(const sprite &rhs, float margin) const {
+			float dx = rhs.modelToWorld[3][0] - modelToWorld[3][0];
+
+			return
+				(fabsf(dx) < halfWidth + margin)
+				;
+		}
+
+		bool &is_enabled() {
+			return enabled;
+		}
+	};
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+#include "GameStateMachine.h"
+
+namespace octet
+{
+  class invaderers_app : public octet::app 
+  {
+	  GameStateMachine* gameStateMachine;
+
     // Matrix to transform points in our camera space to the world.
     // This lets us move our camera
     mat4t cameraToWorld;
@@ -435,12 +453,22 @@ namespace octet {
   public:
 
     // this is called when we construct the class
-    invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") {
+    invaderers_app(int argc, char **argv) 
+		: app(argc, argv), font(512, 256, "assets/big.fnt")
+		, gameStateMachine(nullptr)
+	{
     }
 
+	~invaderers_app()
+	{
+		delete gameStateMachine;
+	}
+
     // this is called once OpenGL is initialized
-    void app_init() {
-		// FIXME: Instance GameStateMachine and call GameStateMachine::SetState
+    void app_init() 
+	{
+		gameStateMachine = GameStateMachine::Instance();
+		gameStateMachine->SetState(GAME_STATE_INIT);
 
       // set up the shader
       texture_shader_.init();
@@ -507,8 +535,11 @@ namespace octet {
     }
 
 	// this is called to simulate the world
-	void simulate_world() {
-		// FIXME: Call GameStateMachine::Update
+	void simulate_world() 
+	{
+		gameStateMachine->UpdateState();
+
+		// FIXME: Move the function below to the proper state
 		simulate();
 	}
 
@@ -529,7 +560,10 @@ namespace octet {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	  
-	  // FIXME: Call GameStateMachine::Render
+	  gameStateMachine->RenderState();
+
+	  // FIXME: Move the code below to the proper state
+
       // draw all the sprites
       for (int i = 0; i != num_sprites; ++i) {
         sprites[i].render(texture_shader_, cameraToWorld);
