@@ -11,7 +11,8 @@ namespace octet
 
 		void Start();
 		void Stop();
-
+		void Suspend();
+		void Resume();
 		void Update();
 		void Render();
 	};

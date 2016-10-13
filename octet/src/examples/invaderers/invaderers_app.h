@@ -467,7 +467,7 @@ namespace octet
     // this is called once OpenGL is initialized
     void app_init() 
 	{
-		gameStateMachine = GameStateMachine::Instance();
+		gameStateMachine = GameStateMachine::GetInstance();
 		gameStateMachine->SetState(GAME_STATE_INIT);
 
       // set up the shader

@@ -1,6 +1,9 @@
 #ifndef GAME_STATE_MACHINE_H
 #define GAME_STATE_MACHINE_H
 
+
+#include <vector>
+
 namespace octet
 {
 	enum GameStateId
@@ -18,10 +21,12 @@ namespace octet
 	class GameStateMachine
 	{
 	public:
-		static GameStateMachine* Instance();
+		static GameStateMachine* GetInstance();
 		~GameStateMachine();
 
 		void SetState(GameStateId gameStateId);
+		void PushState(GameStateId gameStateId);
+		void PopState();
 
 		void UpdateState();
 		void RenderState();
@@ -33,7 +38,7 @@ namespace octet
 
 		void Clear();
 
-		GameState* currentState;
+		std::vector<GameState*> states;
 
 		static GameStateMachine* s_instance;
 	};
