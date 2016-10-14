@@ -85,11 +85,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BatlleState.cpp" />
-    <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="GameStateMachine.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PauseState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\containers\allocator.h" />
@@ -221,12 +217,13 @@
     <ClInclude Include="..\..\shaders\shader.h" />
     <ClInclude Include="..\..\shaders\shaders.h" />
     <ClInclude Include="..\..\shaders\texture_shader.h" />
-    <ClInclude Include="BatlleState.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="GameStateMachine.h" />
+    <ClInclude Include="agarzonp\agarzonp.h" />
+    <ClInclude Include="agarzonp\Gameplay\GameStateMachine.h" />
+    <ClInclude Include="agarzonp\Gameplay\GameStatesDefs.h" />
+    <ClInclude Include="agarzonp\Gameplay\States\BatlleState.h" />
+    <ClInclude Include="agarzonp\Gameplay\States\GameState.h" />
+    <ClInclude Include="agarzonp\Gameplay\States\PauseState.h" />
     <ClInclude Include="invaderers_app.h" />
-    <ClInclude Include="MyIncludes.h" />
-    <ClInclude Include="PauseState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl" />

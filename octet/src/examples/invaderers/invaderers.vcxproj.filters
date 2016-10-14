@@ -33,28 +33,19 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{22786083-47af-48b2-98c4-2963f667bc44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\metagame">
-      <UniqueIdentifier>{4c94e858-41bd-4d53-95cc-daea6a2739eb}</UniqueIdentifier>
+    <Filter Include="Source Files\agarzonp">
+      <UniqueIdentifier>{44fa1917-9309-4570-a2a8-62177752615a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\gamestates">
-      <UniqueIdentifier>{cd03a7e3-8a2f-4aaf-9b36-deee3967fa4a}</UniqueIdentifier>
+    <Filter Include="Source Files\agarzonp\Gameplay">
+      <UniqueIdentifier>{ae36444a-fc00-4595-9cac-6a8dc6d96c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\agarzonp\Gameplay\States">
+      <UniqueIdentifier>{042e08dd-c1dc-4889-af09-faeb1dfc8bbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStateMachine.cpp">
-      <Filter>Source Files\metagame</Filter>
-    </ClCompile>
-    <ClCompile Include="GameState.cpp">
-      <Filter>Source Files\gamestates</Filter>
-    </ClCompile>
-    <ClCompile Include="BatlleState.cpp">
-      <Filter>Source Files\gamestates</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseState.cpp">
-      <Filter>Source Files\gamestates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,20 +439,23 @@
     <ClInclude Include="invaderers_app.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameStateMachine.h">
-      <Filter>Source Files\metagame</Filter>
+    <ClInclude Include="agarzonp\agarzonp.h">
+      <Filter>Source Files\agarzonp</Filter>
     </ClInclude>
-    <ClInclude Include="GameState.h">
-      <Filter>Source Files\gamestates</Filter>
+    <ClInclude Include="agarzonp\Gameplay\GameStateMachine.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="BatlleState.h">
-      <Filter>Source Files\gamestates</Filter>
+    <ClInclude Include="agarzonp\Gameplay\GameStatesDefs.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="MyIncludes.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="agarzonp\Gameplay\States\BatlleState.h">
+      <Filter>Source Files\agarzonp\Gameplay\States</Filter>
     </ClInclude>
-    <ClInclude Include="PauseState.h">
-      <Filter>Source Files\gamestates</Filter>
+    <ClInclude Include="agarzonp\Gameplay\States\GameState.h">
+      <Filter>Source Files\agarzonp\Gameplay\States</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\States\PauseState.h">
+      <Filter>Source Files\agarzonp\Gameplay\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

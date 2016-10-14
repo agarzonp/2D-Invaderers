@@ -17,8 +17,6 @@
 //   Audio
 //
 
-#include "GameStateMachine.h"
-
 namespace octet {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,11 +147,13 @@ namespace octet {
 
 }
 
+#include "agarzonp/agarzonp.h"
+
 namespace octet
 {
   class invaderers_app : public octet::app 
   {
-	  GameStateMachine* gameStateMachine;
+	  agarzonp::GameStateMachine* gameStateMachine;
 
     // Matrix to transform points in our camera space to the world.
     // This lets us move our camera
@@ -467,8 +467,8 @@ namespace octet
     // this is called once OpenGL is initialized
     void app_init() 
 	{
-		gameStateMachine = GameStateMachine::GetInstance();
-		gameStateMachine->SetState(GAME_STATE_INIT);
+		gameStateMachine = agarzonp::GameStateMachine::GetInstance();
+		gameStateMachine->SetState(agarzonp::GameStateId::INIT);
 
       // set up the shader
       texture_shader_.init();
