@@ -50,6 +50,12 @@
     <ClCompile Include="GameState.cpp">
       <Filter>Source Files\gamestates</Filter>
     </ClCompile>
+    <ClCompile Include="BatlleState.cpp">
+      <Filter>Source Files\gamestates</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseState.cpp">
+      <Filter>Source Files\gamestates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\helpers\http_server.h">
@@ -446,6 +452,15 @@
       <Filter>Source Files\metagame</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
+      <Filter>Source Files\gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="BatlleState.h">
+      <Filter>Source Files\gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="MyIncludes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseState.h">
       <Filter>Source Files\gamestates</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,48 +1,51 @@
 #ifndef GAME_STATE_MACHINE_H
 #define GAME_STATE_MACHINE_H
 
-
 #include <vector>
 
-namespace octet
+enum GameStateId
 {
-	enum GameStateId
-	{
-		GAME_STATE_INIT,
-		GAME_STATE_MENU,
-		GAME_STATE_BATTLE,
-		GAME_STATE_RANKING,
+	GAME_STATE_INIT,
 
-		NUM_GAME_STATES
-	};
+	GAME_STATE_MENU,
+	GAME_STATE_BATTLE,
+	GAME_STATE_PAUSE,
+	GAME_STATE_RANKING,
 
-	class GameState;
+	GAME_STATE_EXIT,
 
-	class GameStateMachine
-	{
-	public:
-		static GameStateMachine* GetInstance();
-		~GameStateMachine();
+	NUM_GAME_STATES
+};
 
-		void SetState(GameStateId gameStateId);
-		void PushState(GameStateId gameStateId);
-		void PopState();
+class GameState;
 
-		void UpdateState();
-		void RenderState();
+class GameStateMachine
+{
+public:
+	static GameStateMachine* GetInstance();
+	~GameStateMachine();
 
-	protected:
-		GameStateMachine();
+	void SetState(GameStateId gameStateId);
+	void PushState(GameStateId gameStateId);
+	void PopState();
 
-	private:
+	void UpdateState();
+	void RenderState();
 
-		void Clear();
+protected:
+	GameStateMachine();
 
-		std::vector<GameState*> states;
+private:
 
-		static GameStateMachine* s_instance;
-	};
-}
+	void Clear();
+	GameState* CreateState(GameStateId gameStateId);
+
+	std::vector<GameState*> states;
+	//octet::containers::dynarray<GameState*> states;
+
+	static GameStateMachine* s_instance;
+};
+
 
 #endif
 

@@ -1,22 +1,22 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-namespace octet
+class GameState
 {
-	class GameState
-	{
-	public:
-		GameState();
-		~GameState();
+public:
+	GameState();
+	virtual ~GameState();
 
-		void Start();
-		void Stop();
-		void Suspend();
-		void Resume();
-		void Update();
-		void Render();
-	};
-}
+	virtual void Start();
+	virtual void Stop();
+	virtual void Suspend();
+	virtual void Resume();
+	virtual void Update();
+	virtual void Render();
+
+protected:
+		
+};
 
 #endif
 
