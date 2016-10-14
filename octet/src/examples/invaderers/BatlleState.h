@@ -9,6 +9,12 @@ public:
 	BattleState();
 	~BattleState();
 
+	void Start() override;
+	void Stop()	override;
+	void Suspend() override;
+	void Resume() override;
+	void Update() override;
+	void Render() override;
 		
 };
 
