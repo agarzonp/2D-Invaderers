@@ -108,7 +108,7 @@ namespace octet {
       prev_keys = keys;
     }
 
-	virtual void simulate_world() = 0;
+	virtual void simulate_world() {};
     virtual void draw_world(int x, int y, int w, int h) = 0;
     virtual void app_init() = 0;
 
