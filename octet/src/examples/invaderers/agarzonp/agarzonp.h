@@ -9,8 +9,7 @@
 
 // agarzonp
 #include "Input/Input.h"
-#include "Gameplay/GameStatesDefs.h"
-#include "Gameplay/GameStateMachine.h"	
+#include "Gameplay/Gameplay.h"
 
 #endif // !AGARZONP_H
 

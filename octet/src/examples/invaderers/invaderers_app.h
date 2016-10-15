@@ -153,35 +153,31 @@ namespace octet
 {
   class invaderers_app : public octet::app 
   {
-	  agarzonp::GameStateMachine* gameStateMachine;
+	  agarzonp::Gameplay gameplay;
 
   public:
 
     // this is called when we construct the class
     invaderers_app(int argc, char **argv) 
 		: app(argc, argv)
-		, gameStateMachine(nullptr)
 	{
     }
 
 	~invaderers_app()
 	{
-		delete gameStateMachine;
 	}
 
     // this is called once OpenGL is initialized
 	void app_init()
 	{
-		agarzonp::Input::SetInput(*this);
-
-		gameStateMachine = agarzonp::GameStateMachine::GetInstance();
-		gameStateMachine->SetState(agarzonp::GameStateId::BATTLE);
+		gameplay.Init(*this);
 	}
 
 	// this is called to simulate the world
 	void simulate_world() 
 	{
-		gameStateMachine->UpdateState();
+		// update the gameplay
+		gameplay.Update();
 	}
 
     // this is called to draw the world
@@ -200,8 +196,9 @@ namespace octet
       // allow alpha blend (transparency when alpha channel is 0)
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	  
-	  gameStateMachine->RenderState();
+	 
+	  // render the gameplay
+	  gameplay.Render();
     }
   };
 }

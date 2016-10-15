@@ -218,6 +218,7 @@
     <ClInclude Include="..\..\shaders\shaders.h" />
     <ClInclude Include="..\..\shaders\texture_shader.h" />
     <ClInclude Include="agarzonp\agarzonp.h" />
+    <ClInclude Include="agarzonp\Gameplay\Gameplay.h" />
     <ClInclude Include="agarzonp\Gameplay\GameStateMachine.h" />
     <ClInclude Include="agarzonp\Gameplay\GameStatesDefs.h" />
     <ClInclude Include="agarzonp\Gameplay\States\BattleState.h" />
