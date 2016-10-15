@@ -1,8 +1,6 @@
 #ifndef BATTLE_STATE_H
 #define BATTLE_STATE_H
 
-#include "octet.h"
-
 namespace agarzonp
 {
 	class BattleState : public GameState
@@ -79,7 +77,12 @@ namespace agarzonp
 		octet::ALuint get_sound_source() { return sources[cur_source++ % num_sound_sources]; }
 
 	public:
-		BattleState():font(512, 256, "assets/big.fnt") {}
+		BattleState(GameStateMachineInterface* gsmInterface) 
+			: GameState(gsmInterface)
+			, font(512, 256, "assets/big.fnt") 
+		{
+		}
+
 		~BattleState() {}
 
 		void Start() override 
@@ -155,6 +158,12 @@ namespace agarzonp
 		void Update() override 
 		{
 			if (game_over) {
+				return;
+			}
+
+			if (Input::is_key_going_down(octet::key_f1))
+			{
+				gameStateMachineInterface->PushState(GameStateId::PAUSE);
 				return;
 			}
 

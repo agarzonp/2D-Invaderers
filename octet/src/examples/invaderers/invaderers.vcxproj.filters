@@ -451,9 +451,6 @@
     <ClInclude Include="agarzonp\Gameplay\GameStateMachine.h">
       <Filter>Source Files\agarzonp\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="agarzonp\Gameplay\GameStatesDefs.h">
-      <Filter>Source Files\agarzonp\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="agarzonp\Gameplay\States\GameState.h">
       <Filter>Source Files\agarzonp\Gameplay\States</Filter>
     </ClInclude>
@@ -471,6 +468,15 @@
     </ClInclude>
     <ClInclude Include="agarzonp\CSVParser\CSVParser.h">
       <Filter>Source Files\agarzonp\CSVParser</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameStateMachineInterface.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameStatesIds.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameStates.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

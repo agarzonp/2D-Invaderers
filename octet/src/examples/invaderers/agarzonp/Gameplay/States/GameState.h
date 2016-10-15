@@ -5,8 +5,11 @@ namespace agarzonp
 {
 	class GameState
 	{
+	protected:
+		// The interface used by the state to communicate with the game state machine
+		GameStateMachineInterface* gameStateMachineInterface;
 	public:
-		GameState() {};
+		GameState(GameStateMachineInterface* gsmInterface) : gameStateMachineInterface(gsmInterface){};
 		virtual ~GameState() {};
 
 		virtual void Start() {};
@@ -15,9 +18,6 @@ namespace agarzonp
 		virtual void Resume() {};
 		virtual void Update() {};
 		virtual void Render() {};
-
-	protected:
-
 	};
 }
 

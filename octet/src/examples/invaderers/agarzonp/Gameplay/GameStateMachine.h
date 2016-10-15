@@ -1,36 +1,22 @@
 #ifndef GAME_STATE_MACHINE_H
 #define GAME_STATE_MACHINE_H
 
-#include "GameStatesDefs.h"
+#include "GameStatesIds.h"
+#include "GameStateMachineInterface.h"
+#include "GameStates.h"
 
 namespace agarzonp
 {
-	class GameStateMachine
+	class GameStateMachine final : public GameStateMachineInterface
 	{
 		octet::containers::dynarray<GameState*> states;
 
-		static GameStateMachine* s_instance;
-
 	public:
 
-		// singleton pattern. There could be problems in a multithreaded environment?
-		static GameStateMachine* GetInstance()
-		{
-			if (!s_instance)
-			{
-				s_instance = new GameStateMachine();
-			}
+		GameStateMachine() {}
+		~GameStateMachine() {Clear();}
 
-			return s_instance;
-		}
-
-		~GameStateMachine()
-		{
-			Clear();
-			s_instance = nullptr;
-		}
-
-		void SetState(GameStateId gameStateId)
+		void SetState(GameStateId gameStateId) final
 		{
 			Clear();
 
@@ -39,7 +25,7 @@ namespace agarzonp
 			states.back()->Start();
 		}
 
-		void PushState(GameStateId gameStateId)
+		void PushState(GameStateId gameStateId) final
 		{
 			if (states.size() > 0)
 			{
@@ -51,7 +37,7 @@ namespace agarzonp
 			states.back()->Start();
 		}
 
-		void PopState()
+		void PopState() final
 		{
 			if (states.size() > 0)
 			{
@@ -80,13 +66,6 @@ namespace agarzonp
 			}
 		}
 
-	protected:
-		GameStateMachine()
-		{
-			// it might assert in a multithreaded environment. Fix the singleton!
-			assert(!s_instance);
-		}
-
 	private:
 
 		void Clear()
@@ -109,24 +88,21 @@ namespace agarzonp
 			switch (gameStateId)
 			{
 			case GameStateId::BATTLE:
-				state = new BattleState();
+				state = new BattleState(this);
 				break;
 			case GameStateId::PAUSE:
-				state = new PauseState();
+				state = new PauseState(this);
 				break;
 			default:
 				assert(false); // GameStateId not handled!
-				state = new GameState();
+				state = new GameState(this);
 				break;
 			}
 
 			return state;
 		}
 	};
-
-	GameStateMachine* GameStateMachine::s_instance = nullptr;
 }
-
 
 #endif
 

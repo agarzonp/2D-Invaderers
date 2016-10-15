@@ -6,14 +6,25 @@ namespace agarzonp
 	class PauseState : public GameState
 	{
 	public:
-		PauseState() {};
+		PauseState(GameStateMachineInterface* gsmInterface)
+			: GameState(gsmInterface)
+		{
+		}
+
 		~PauseState() {};
 
 		void Start() override {};
 		void Stop() override {};
 		void Suspend() override {};
 		void Resume() override {};
-		void Update() override {};
+		void Update() override 
+		{
+			if (Input::is_key_going_down(octet::key_f1))
+			{
+				gameStateMachineInterface->PopState();
+			}
+		}
+
 		void Render() override {};
 	};
 }

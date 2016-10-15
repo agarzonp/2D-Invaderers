@@ -7,48 +7,34 @@ namespace agarzonp
 {
 	class Gameplay
 	{
-		GameStateMachine* gameStateMachine;
+		GameStateMachine gameStateMachine;
 
 	public:
 
-		Gameplay() : gameStateMachine(nullptr) {}
+		Gameplay() {}
 		~Gameplay() { Finish(); }
-
 
 		void Init(const octet::app& app)
 		{
 			// Needed for getting the input across different game states
 			agarzonp::Input::SetInput(app);
 
-			assert(!gameStateMachine);
-
-			gameStateMachine = GameStateMachine::GetInstance();
-			gameStateMachine->SetState(GameStateId::BATTLE);
-		}
-
-		void Finish()
-		{
-			if (gameStateMachine)
-			{
-				delete gameStateMachine;
-			}
+			gameStateMachine.SetState(GameStateId::BATTLE);
 		}
 
 		void Update() 
 		{
-			if (gameStateMachine)
-			{
-				gameStateMachine->UpdateState();
-			}
+			gameStateMachine.UpdateState();	
 		}
 
 		void Render()
 		{
-			if (gameStateMachine)
-			{
-				gameStateMachine->RenderState();
-			}
+			gameStateMachine.RenderState();	
 		}
+
+	private:
+
+		void Finish() {}
 	};
 }
 
