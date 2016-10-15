@@ -451,9 +451,6 @@
     <ClInclude Include="agarzonp\Gameplay\GameStatesDefs.h">
       <Filter>Source Files\agarzonp\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="agarzonp\Gameplay\States\BatlleState.h">
-      <Filter>Source Files\agarzonp\Gameplay\States</Filter>
-    </ClInclude>
     <ClInclude Include="agarzonp\Gameplay\States\GameState.h">
       <Filter>Source Files\agarzonp\Gameplay\States</Filter>
     </ClInclude>
@@ -462,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="agarzonp\Input\Input.h">
       <Filter>Source Files\agarzonp\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\States\BattleState.h">
+      <Filter>Source Files\agarzonp\Gameplay\States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

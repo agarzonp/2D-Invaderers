@@ -220,7 +220,7 @@
     <ClInclude Include="agarzonp\agarzonp.h" />
     <ClInclude Include="agarzonp\Gameplay\GameStateMachine.h" />
     <ClInclude Include="agarzonp\Gameplay\GameStatesDefs.h" />
-    <ClInclude Include="agarzonp\Gameplay\States\BatlleState.h" />
+    <ClInclude Include="agarzonp\Gameplay\States\BattleState.h" />
     <ClInclude Include="agarzonp\Gameplay\States\GameState.h" />
     <ClInclude Include="agarzonp\Gameplay\States\PauseState.h" />
     <ClInclude Include="agarzonp\Input\Input.h" />
