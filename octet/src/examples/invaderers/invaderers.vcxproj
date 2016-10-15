@@ -223,6 +223,7 @@
     <ClInclude Include="agarzonp\Gameplay\States\BatlleState.h" />
     <ClInclude Include="agarzonp\Gameplay\States\GameState.h" />
     <ClInclude Include="agarzonp\Gameplay\States\PauseState.h" />
+    <ClInclude Include="agarzonp\Input\Input.h" />
     <ClInclude Include="invaderers_app.h" />
   </ItemGroup>
   <ItemGroup>

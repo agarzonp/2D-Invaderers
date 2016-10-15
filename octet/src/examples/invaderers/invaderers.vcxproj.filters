@@ -42,6 +42,9 @@
     <Filter Include="Source Files\agarzonp\Gameplay\States">
       <UniqueIdentifier>{042e08dd-c1dc-4889-af09-faeb1dfc8bbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\agarzonp\Input">
+      <UniqueIdentifier>{e0c2fa13-1cde-44ab-aa2e-01c81970ec82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -456,6 +459,9 @@
     </ClInclude>
     <ClInclude Include="agarzonp\Gameplay\States\PauseState.h">
       <Filter>Source Files\agarzonp\Gameplay\States</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Input\Input.h">
+      <Filter>Source Files\agarzonp\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,7 @@ namespace agarzonp
 		{
 			Clear();
 
-			states.push_back(new GameState());
+			states.push_back(CreateState(gameStateId));
 
 			states.back()->Start();
 		}
@@ -46,7 +46,7 @@ namespace agarzonp
 				states.back()->Suspend();
 			}
 
-			states.push_back(new GameState());
+			states.push_back(CreateState(gameStateId));
 
 			states.back()->Start();
 		}

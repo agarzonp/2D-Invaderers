@@ -1,19 +1,16 @@
 #ifndef AGARZONP_H
 #define AGARZONP_H
 
-namespace agarzonp
-{
-}
-
-// octect framework
+// octect
 #include "octet.h"
-
-//gameplay specific
-#include "Gameplay/GameStatesDefs.h"
-#include "Gameplay/GameStateMachine.h"	
 
 //others
 #include <cassert>
+
+// agarzonp
+#include "Input/Input.h"
+#include "Gameplay/GameStatesDefs.h"
+#include "Gameplay/GameStateMachine.h"	
 
 #endif // !AGARZONP_H
 

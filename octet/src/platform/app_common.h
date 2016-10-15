@@ -113,17 +113,17 @@ namespace octet {
     virtual void app_init() = 0;
 
     /// returns true if a key is down
-    bool is_key_down(unsigned key) {
+    bool is_key_down(unsigned key) const {
       return keys[key & 0xff] != 0;
     }
 
     /// returns true if a key has gone down this frame
-    bool is_key_going_down(unsigned key) {
+    bool is_key_going_down(unsigned key) const {
       return keys[key & 0xff] != 0 && prev_keys[key & 0xff] == 0;
     }
 
     /// returns true if a key has gone down this frame
-    bool is_key_going_up(unsigned key) {
+    bool is_key_going_up(unsigned key) const {
       return keys[key & 0xff] != 0 && prev_keys[key & 0xff] == 0;
     }
 
