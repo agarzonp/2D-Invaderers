@@ -45,6 +45,9 @@
     <Filter Include="Source Files\agarzonp\Input">
       <UniqueIdentifier>{e0c2fa13-1cde-44ab-aa2e-01c81970ec82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\agarzonp\CSVParser">
+      <UniqueIdentifier>{4d89be20-f80d-47bf-9eb9-af5844389a7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -465,6 +468,9 @@
     </ClInclude>
     <ClInclude Include="agarzonp\Gameplay\Gameplay.h">
       <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\CSVParser\CSVParser.h">
+      <Filter>Source Files\agarzonp\CSVParser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

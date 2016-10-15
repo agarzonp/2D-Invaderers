@@ -10,6 +10,7 @@
 // agarzonp
 #include "Input/Input.h"
 #include "Gameplay/Gameplay.h"
+#include "CSVParser/CSVParser.h"
 
 #endif // !AGARZONP_H
 
