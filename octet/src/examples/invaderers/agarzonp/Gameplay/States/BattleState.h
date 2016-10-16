@@ -22,20 +22,22 @@ namespace agarzonp
 			num_invaderers = num_rows * num_cols,
 
 			// sprite definitions
-			ship_sprite = 0,
+			first_border_sprite = 0,
+			last_border_sprite = first_border_sprite + num_borders - 1,
+			
 			game_over_sprite,
 
-			first_invaderer_sprite,
-			last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
-
+			ship_sprite,
+			
 			first_missile_sprite,
 			last_missile_sprite = first_missile_sprite + num_missiles - 1,
 
 			first_bomb_sprite,
 			last_bomb_sprite = first_bomb_sprite + num_bombs - 1,
 
-			first_border_sprite,
-			last_border_sprite = first_border_sprite + num_borders - 1,
+			// FIXME: invaderers num sprites will be dynamic according to the level layout
+			first_invaderer_sprite,
+			last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
 
 			num_sprites,
 
@@ -102,15 +104,8 @@ namespace agarzonp
 			GLuint GameOver = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
 			sprites[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
 
-			GLuint invaderer = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
-			for (int j = 0; j != num_rows; ++j) {
-				for (int i = 0; i != num_cols; ++i) {
-					assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
-					sprites[first_invaderer_sprite + i + j*num_cols].init(
-						invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 2.50f - ((float)j * 0.5f), 0.5f, 0.5f
-					);
-				}
-			}
+			LoadLevel(0);
+			
 
 			// set the border to white for clarity
 			GLuint white = octet::resource_dict::get_texture_handle(GL_RGB, "#ffffff");
@@ -372,6 +367,121 @@ private:
 				return false;
 			}
 
+			enum class LevelLoaderResult : uint8_t
+			{
+				LOADED,
+				LOADED_BUT_ERRORS,
+				NOT_LOADED_LEVEL_NOT_FOUND,
+				NOT_LOADED_LEVEL_INVALID_LAYOUT
+			};
+
+			void LoadLevel(int level)
+			{
+				octet::string levelPath;
+				levelPath.printf("Level_%d.csv", level);
+
+				LevelLoaderResult result = LoadLevel(levelPath.c_str());
+				switch (result)
+				{
+				case LevelLoaderResult::LOADED:
+					break;
+				case LevelLoaderResult::LOADED_BUT_ERRORS:
+					printf("Level %s was loaded with some errors. Check output.", levelPath.c_str());
+					break;
+				case LevelLoaderResult::NOT_LOADED_LEVEL_NOT_FOUND:
+					printf("Level %s couldn´t be loaded. Not such file or directory.", levelPath.c_str());
+					break;
+				case LevelLoaderResult::NOT_LOADED_LEVEL_INVALID_LAYOUT:
+					printf("Level %s couldn´t be loaded. Level layout is not setup properly.", levelPath.c_str());
+					break;
+				}
+			}
+
+			LevelLoaderResult LoadLevel(const char* levelPath)
+			{
+				CSVParser csvParser(levelPath);
+
+				if (csvParser.IsValid())
+				{
+					size_t numRows = csvParser.NumRows();
+					size_t numCols = csvParser.NumCols();
+
+					int maxNumEnemies = int(numRows * numCols);
+					if (maxNumEnemies > num_sprites)
+					{
+						assert(false);
+						// FIXME: The sprite pool needs to be resized!
+					}
+
+					if (numRows > 0 && numCols > 0)
+					{
+						bool success = true;
+						for (size_t row = 0; row < numRows; row++)
+						{
+							for (size_t col = 0; col < numCols; col++)
+							{
+								// Parse the enemy "[enemyType]_[enemySize]". For example, Invader_2 
+								const char* enemyStart = csvParser[row][col];
+								const char* p = enemyStart;
+
+								if (*p == '\0')
+								{
+									// Empty means that the enemy occupies more than one column, so skip to the next column
+									continue;
+								}
+
+								// Increment until we get the underscore
+								while (*p++ != '_')
+								{
+								}
+
+								if (*p == '\0')
+								{
+									printf("Error while parsing enemy %s. Level %s row %d col %d", enemyStart, levelPath, int(row), int(col));
+									success = false;
+									continue;
+								}
+								p--;
+
+								// get the enemy
+								octet::string enemyType(enemyStart, int(p - enemyStart));
+
+								// get the size of the enemy
+								p++;
+								int enemySize = atoi(p);
+								CreateEnemy(enemyType.c_str(), float(enemySize), row, col);
+							}
+						}
+							
+						return success ? LevelLoaderResult::LOADED : LevelLoaderResult::LOADED_BUT_ERRORS;
+					}
+
+					return LevelLoaderResult::NOT_LOADED_LEVEL_INVALID_LAYOUT;
+				}
+
+				return LevelLoaderResult::NOT_LOADED_LEVEL_NOT_FOUND;
+			}
+
+			void CreateEnemy(const char* enemyType, float size, size_t row, size_t col)
+			{
+				static GLuint invaderer = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
+				static int invadererSprite = first_invaderer_sprite;
+
+				static float oneSizeWidth = 0.5f;
+				static float halfOneSizeWidth = oneSizeWidth * 0.5f;
+				float width = size  * oneSizeWidth;
+				float height = size * oneSizeWidth;
+				float sizeOffset = float(size - 1) * halfOneSizeWidth;
+				float x = (float)(col - num_cols * 0.5f) * 0.5f + sizeOffset;
+				float y = 2.50f - ((float)row * 0.5f) - sizeOffset;
+
+				sprites[invadererSprite].init
+				(
+					invaderer, x, y, width, height
+				);
+
+				invadererSprite++;
+			}
 
 			void draw_text(octet::texture_shader &shader, float x, float y, float scale, const char *text) {
 				octet::mat4t modelToWorld;
