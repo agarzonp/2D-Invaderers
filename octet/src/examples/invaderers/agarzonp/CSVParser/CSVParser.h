@@ -23,7 +23,7 @@ namespace agarzonp
 			tokens.emplace_back(start, end);
 		}
 		
-		const char* operator[] (unsigned index) const
+		const char* operator[] (size_t index) const
 		{
 			assert(index < tokens.size());
 
@@ -64,13 +64,22 @@ namespace agarzonp
 
 		bool IsValid() { return isValid; }
 
+		const CSVRow& operator[](size_t rowIndex)
+		{
+			assert(rowIndex < rows.size());
+			return rows[rowIndex];
+		}
+
+		size_t NumRows() { return rows.size();  }
+		size_t NumCols() { return rows.size() > 0 ? rows[0].NumTokens() : 0; }
+
 	private:
 
 		void ParseFile(const char* file)
 		{
 			std::ifstream is(file);
 
-			if (is.bad())
+			if (is.bad() || !is.is_open())
 			{
 				return;
 			}
@@ -87,20 +96,23 @@ namespace agarzonp
 
 				CSVRow row;
 
-				// loop over columns
 				char *b = buffer;
-				for (int col = 0; ; ++col) {
-					char *e = b;
-					while (*e != 0 && *e != ',') ++e;
+				if (*b != '\0') // avoid the empty line
+				{
+					// loop over columns
+					for (int col = 0; ; ++col) {
+						char *e = b;
+						while (*e != 0 && *e != ',') ++e;
 
-					// now b -> e contains the chars in a column
-					row.AddToken(b, e);
+						// now b -> e contains the chars in a column
+						row.AddToken(b, e);
 
-					if (*e != ',') break;
-					b = e + 1;
+						if (*e != ',') break;
+						b = e + 1;
+					}
+
+					rows.emplace_back(row);
 				}
-
-				rows.emplace_back(row);
 			}
 		}
 	};
