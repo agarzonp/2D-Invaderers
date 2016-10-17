@@ -49,12 +49,14 @@ namespace agarzonp
 
 	public:
 
-		CSVParser(const char* file)
+		CSVParser(const char* file, const char delimiter = ',')
 			: filePath(file)
 			, isValid(false)
 		{
-			ParseFile(filePath);
+			ParseFile(filePath, delimiter);
 		}
+
+		CSVParser() : isValid(false) {}
 
 		~CSVParser()
 		{
@@ -73,9 +75,16 @@ namespace agarzonp
 		size_t NumRows() { return rows.size();  }
 		size_t NumCols() { return rows.size() > 0 ? rows[0].NumTokens() : 0; }
 
+		void ParseCSVLine(const char* line, const char delimiter = ',')
+		{
+			isValid = true;
+
+			ParseLine(line, delimiter);
+		}
+
 	private:
 
-		void ParseFile(const char* file)
+		void ParseFile(const char* file, const char delimiter)
 		{
 			std::ifstream is(file);
 
@@ -94,25 +103,32 @@ namespace agarzonp
 			{
 				is.getline(buffer, sizeof(buffer));
 
-				CSVRow row;
+				ParseLine(buffer, delimiter);
+			}
 
-				char *b = buffer;
-				if (*b != '\0') // avoid the empty line
-				{
-					// loop over columns
-					for (int col = 0; ; ++col) {
-						char *e = b;
-						while (*e != 0 && *e != ',') ++e;
+			is.close();
+		}
 
-						// now b -> e contains the chars in a column
-						row.AddToken(b, e);
+		void ParseLine(const char* buffer, const char delimiter)
+		{
+			CSVRow row;
 
-						if (*e != ',') break;
-						b = e + 1;
-					}
+			const char *b = buffer;
+			if (*b != '\0') // avoid the empty line
+			{
+				// loop over columns
+				for (int col = 0; ; ++col) {
+					const char *e = b;
+					while (*e != 0 && *e != delimiter) ++e;
 
-					rows.emplace_back(row);
+					// now b -> e contains the chars in a column
+					row.AddToken(b, e);
+
+					if (*e != delimiter) break;
+					b = e + 1;
 				}
+
+				rows.emplace_back(row);
 			}
 		}
 	};
