@@ -105,10 +105,6 @@ namespace octet {
       app_init();
     }
 
-	void simulate() {
-		simulate_world();
-	}
-
     void render() {
       //printf("render %d\n", glutGetWindow());
       int vx, vy;

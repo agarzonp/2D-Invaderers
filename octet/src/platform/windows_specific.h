@@ -185,10 +185,6 @@ namespace octet {
       UpdateWindow (window_handle);
     }
 
-	void simulate() {
-		simulate_world();
-	}
-
     void render() {
       HDC hdc = GetDC(window_handle);
       wglMakeCurrent (hdc, gl_context);
@@ -203,10 +199,12 @@ namespace octet {
       GetClientRect(window_handle, &rect);
       set_viewport_size(rect.right - rect.left, rect.bottom - rect.top);
 
+	  simulate_world();
+
       begin_frame();
 
       draw_world(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-      inc_frame_number();
+	  inc_frame_number();
 
       end_frame();
 
@@ -350,8 +348,6 @@ namespace octet {
           if (m.get_key(i) && m.get_value(i)) {
 
 			  octet::app* app = m.get_value(i);
-
-			  app->simulate();
 			  app->render();
           }
         }
