@@ -9,10 +9,24 @@ namespace agarzonp
 
 		MENU,
 		BATTLE,
+		DEBUG_MENU,
 		PAUSE,
 		RANKING,
 
-		EXIT
+		EXIT,
+
+		NUM_GAME_STATE_IDS
+	};
+
+	static const char* s_gameStateIdNames[] =
+	{
+		"init",
+		"menu",
+		"battle",
+		"debugmenu",
+		"pause",
+		"ranking",
+		"exit"
 	};
 }
 

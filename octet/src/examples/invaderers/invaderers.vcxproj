@@ -225,6 +225,7 @@
     <ClInclude Include="agarzonp\Gameplay\GameStateMachineInterface.h" />
     <ClInclude Include="agarzonp\Gameplay\GameStatesIds.h" />
     <ClInclude Include="agarzonp\Gameplay\States\BattleState.h" />
+    <ClInclude Include="agarzonp\Gameplay\States\DebugMenuState.h" />
     <ClInclude Include="agarzonp\Gameplay\States\GameState.h" />
     <ClInclude Include="agarzonp\Gameplay\States\PauseState.h" />
     <ClInclude Include="agarzonp\Input\Input.h" />

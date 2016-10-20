@@ -156,7 +156,7 @@ namespace agarzonp
 				return;
 			}
 
-			if (Input::is_key_going_down(octet::key_f1))
+			if (Input::is_key_going_down(octet::key_esc))
 			{
 				gameStateMachineInterface->PushState(GameStateId::PAUSE);
 				return;

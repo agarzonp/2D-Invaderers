@@ -90,6 +90,9 @@ namespace agarzonp
 			case GameStateId::BATTLE:
 				state = new BattleState(this);
 				break;
+			case GameStateId::DEBUG_MENU:
+				state = new DebugMenuState(this);
+				break;
 			case GameStateId::PAUSE:
 				state = new PauseState(this);
 				break;

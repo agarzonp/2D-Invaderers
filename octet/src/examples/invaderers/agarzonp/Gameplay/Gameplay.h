@@ -25,6 +25,12 @@ namespace agarzonp
 		void Update() 
 		{
 			gameStateMachine.UpdateState();	
+
+			if (Input::is_key_going_down(octet::key_f1))
+			{
+				gameStateMachine.PushState(GameStateId::DEBUG_MENU);
+				return;
+			}
 		}
 
 		void Render()

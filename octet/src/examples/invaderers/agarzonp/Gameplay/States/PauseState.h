@@ -19,7 +19,7 @@ namespace agarzonp
 		void Resume() override {};
 		void Update() override 
 		{
-			if (Input::is_key_going_down(octet::key_f1))
+			if (Input::is_key_going_down(octet::key_esc))
 			{
 				gameStateMachineInterface->PopState();
 			}
