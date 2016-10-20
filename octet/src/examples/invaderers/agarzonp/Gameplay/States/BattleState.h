@@ -416,6 +416,9 @@ private:
 					if (numRows > 0 && numCols > 0)
 					{
 						bool success = true;
+
+						unsigned spriteIndex = first_invaderer_sprite;
+
 						for (size_t row = 0; row < numRows; row++)
 						{
 							for (size_t col = 0; col < numCols; col++)
@@ -449,7 +452,9 @@ private:
 								// get the size of the enemy
 								p++;
 								int enemySize = atoi(p);
-								CreateEnemy(enemyType.c_str(), float(enemySize), row, col);
+								CreateEnemy(spriteIndex, enemyType.c_str(), float(enemySize), row, col);
+
+								spriteIndex++;
 							}
 						}
 							
@@ -462,11 +467,10 @@ private:
 				return LevelLoaderResult::NOT_LOADED_LEVEL_NOT_FOUND;
 			}
 
-			void CreateEnemy(const char* enemyType, float size, size_t row, size_t col)
+			void CreateEnemy(unsigned spriteIndex, const char* enemyType, float size, size_t row, size_t col)
 			{
 				static GLuint invaderer = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
-				static int invadererSprite = first_invaderer_sprite;
-
+			
 				static float oneSizeWidth = 0.5f;
 				static float halfOneSizeWidth = oneSizeWidth * 0.5f;
 				float width = size  * oneSizeWidth;
@@ -475,12 +479,14 @@ private:
 				float x = (float)(col - num_cols * 0.5f) * 0.5f + sizeOffset;
 				float y = 2.50f - ((float)row * 0.5f) - sizeOffset;
 
-				sprites[invadererSprite].init
-				(
-					invaderer, x, y, width, height
-				);
-
-				invadererSprite++;
+				assert(spriteIndex < num_sprites);
+				if (spriteIndex < num_sprites)
+				{
+					sprites[spriteIndex].init
+					(
+						invaderer, x, y, width, height
+					);
+				}
 			}
 
 			void draw_text(octet::texture_shader &shader, float x, float y, float scale, const char *text) {
