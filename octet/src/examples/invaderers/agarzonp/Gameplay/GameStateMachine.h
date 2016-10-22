@@ -40,6 +40,7 @@ namespace agarzonp
 
 		void PopState() final
 		{
+			assert(states.size() > 1);
 			if (states.size() > 0)
 			{
 				states.back()->Stop();
@@ -47,7 +48,10 @@ namespace agarzonp
 				delete states.back();
 				states.pop_back();
 
-				states.back()->Resume();
+				if (states.size() > 0)
+				{
+					states.back()->Resume();
+				}
 			}
 		}
 
