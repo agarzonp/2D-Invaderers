@@ -481,6 +481,12 @@
     <ClInclude Include="agarzonp\Gameplay\States\DebugMenuState.h">
       <Filter>Source Files\agarzonp\Gameplay\States</Filter>
     </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameStateParams.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\States\GameStateParamsDefs.h">
+      <Filter>Source Files\agarzonp\Gameplay\States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl">

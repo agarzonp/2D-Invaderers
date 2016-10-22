@@ -87,8 +87,12 @@ namespace agarzonp
 
 		~BattleState() {}
 
-		void Start() override 
+		void Start(GameStateParams* params) override
 		{
+			GameState::Start(params);
+
+			BattleStateParams* battleParams = static_cast<BattleStateParams*>(params);
+
 			// set up the shader
 			texture_shader_.init();
 
@@ -104,7 +108,7 @@ namespace agarzonp
 			GLuint GameOver = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
 			sprites[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
 
-			LoadLevel(0);
+			LoadLevel(battleParams ? battleParams->level : 0);
 			
 
 			// set the border to white for clarity
@@ -146,12 +150,25 @@ namespace agarzonp
 			score = 0;
 		}
 
-		void Stop()	override {};
-		void Suspend() override {};
-		void Resume() override {};
+		void Stop()	override 
+		{
+			GameState::Stop();
+		}
+
+		void Suspend() override 
+		{
+			GameState::Stop();
+		}
+
+		void Resume() override 
+		{
+			GameState::Resume();
+		}
 
 		void Update() override 
 		{
+			GameState::Update();
+
 			if (game_over) {
 				return;
 			}
@@ -182,6 +199,8 @@ namespace agarzonp
 		}
 		void Render() override 
 		{
+			GameState::Render();
+
 			// draw all the sprites
 			for (int i = 0; i != num_sprites; ++i) {
 				sprites[i].render(texture_shader_, cameraToWorld);

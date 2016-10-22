@@ -8,16 +8,34 @@ namespace agarzonp
 	protected:
 		// The interface used by the state to communicate with the game state machine
 		GameStateMachineInterface* gameStateMachineInterface;
-	public:
-		GameState(GameStateMachineInterface* gsmInterface) : gameStateMachineInterface(gsmInterface){};
-		virtual ~GameState() {};
 
-		virtual void Start() {};
-		virtual void Stop() {};
-		virtual void Suspend() {};
-		virtual void Resume() {};
-		virtual void Update() {};
-		virtual void Render() {};
+		// parameters for setting the state. The state is the one responsible for deleting the parameters
+		GameStateParams* stateParams;
+	public:
+		GameState(GameStateMachineInterface* gsmInterface) 
+			: gameStateMachineInterface(gsmInterface)
+			, stateParams(nullptr)
+		{
+		};
+
+		virtual ~GameState() 
+		{
+			if (stateParams)
+			{
+				delete stateParams;
+			}
+		};
+
+		virtual void Start(GameStateParams* params = nullptr)
+		{ 
+			stateParams = params; 
+		}
+
+		virtual void Stop() {}
+		virtual void Suspend() {}
+		virtual void Resume() {}
+		virtual void Update() {}
+		virtual void Render() {}
 	};
 }
 

@@ -6,6 +6,7 @@
 
 //others
 #include <cassert>
+#include <cctype>
 
 // agarzonp
 #include "CSVParser/CSVParser.h"

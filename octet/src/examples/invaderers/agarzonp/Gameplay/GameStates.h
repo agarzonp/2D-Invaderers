@@ -1,6 +1,9 @@
 
 #include "States/GameState.h"
 
+// All the specific game states params
+#include "States/GameStateParamsDefs.h"
+
 // All the specific states
 //#include "States/InitState.h"
 //#include "States/MenuState.h"

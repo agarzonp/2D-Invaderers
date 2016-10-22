@@ -19,7 +19,10 @@ namespace agarzonp
 			// Needed for getting the input across different game states
 			agarzonp::Input::SetInput(app);
 
-			gameStateMachine.SetState(GameStateId::BATTLE);
+			BattleStateParams* params = new BattleStateParams();
+			params->level = 0;
+
+			gameStateMachine.SetState(GameStateId::BATTLE, params);
 		}
 
 		void Update() 

@@ -32,14 +32,32 @@ namespace agarzonp
 		{
 		}
 
-		~DebugMenuState() {};
+		~DebugMenuState() {}
 
-		void Start() override {};
-		void Stop() override {};
-		void Suspend() override {};
-		void Resume() override {};
+		void Start(GameStateParams* params) override 
+		{
+			GameState::Start(params);
+		}
+
+		void Stop() override 
+		{
+			GameState::Stop();
+		}
+
+		void Suspend() override 
+		{
+			GameState::Suspend();
+		}
+
+		void Resume() override 
+		{
+			GameState::Resume();
+		}
+
 		void Update() override
 		{
+			GameState::Update();
+
 			static std::string command; 
 			
 			printf("Enter debug command (type help for available commands): ");
@@ -51,7 +69,10 @@ namespace agarzonp
 			}
 		}
 
-		void Render() override {};
+		void Render() override 
+		{
+			GameState::Render();
+		}
 
 	private:
 
@@ -109,7 +130,35 @@ namespace agarzonp
 			{
 				if (strcmp(state, s_gameStateIdNames[i]) == 0)
 				{
-					gameStateMachineInterface->SetState(GameStateId(i)); // FIXME: we need to pass additional parameters into the SetState function
+					BattleStateParams* params = new BattleStateParams();
+
+					// check that the argument is the level to load
+					if (arg)
+					{
+						bool isNumber = true;
+						
+						const char* p = arg;
+						while (*p)
+						{
+							if (!std::isdigit(*p))
+							{
+								isNumber = false;
+								
+								break;
+							}
+
+							p++;
+						}
+					
+						assert(isNumber);
+						if (isNumber)
+						{
+							int level = atoi(arg);
+							params->level = level;
+						}
+					}
+
+					gameStateMachineInterface->SetState(GameStateId(i), params); 
 					return true;
 				}
 			}

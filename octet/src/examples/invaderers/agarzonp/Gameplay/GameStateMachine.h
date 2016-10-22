@@ -2,6 +2,7 @@
 #define GAME_STATE_MACHINE_H
 
 #include "GameStatesIds.h"
+#include "GameStateParams.h"
 #include "GameStateMachineInterface.h"
 #include "GameStates.h"
 
@@ -16,16 +17,16 @@ namespace agarzonp
 		GameStateMachine() {}
 		~GameStateMachine() {Clear();}
 
-		void SetState(GameStateId gameStateId) final
+		void SetState(GameStateId gameStateId, GameStateParams* params = nullptr) final
 		{
 			Clear();
 
 			states.push_back(CreateState(gameStateId));
 
-			states.back()->Start();
+			states.back()->Start(params);
 		}
 
-		void PushState(GameStateId gameStateId) final
+		void PushState(GameStateId gameStateId, GameStateParams* params = nullptr) final
 		{
 			if (states.size() > 0)
 			{
@@ -34,7 +35,7 @@ namespace agarzonp
 
 			states.push_back(CreateState(gameStateId));
 
-			states.back()->Start();
+			states.back()->Start(params);
 		}
 
 		void PopState() final

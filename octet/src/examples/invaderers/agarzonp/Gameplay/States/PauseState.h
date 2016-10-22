@@ -11,21 +11,42 @@ namespace agarzonp
 		{
 		}
 
-		~PauseState() {};
+		~PauseState() {}
 
-		void Start() override {};
-		void Stop() override {};
-		void Suspend() override {};
-		void Resume() override {};
+		void Start(GameStateParams* params) override
+		{
+			GameState::Start(params);
+		}
+
+		void Stop() override 
+		{
+			GameState::Stop();
+		}
+
+		void Suspend() override 
+		{
+			GameState::Suspend();
+		}
+
+		void Resume() override 
+		{
+			GameState::Resume();
+		}
+
 		void Update() override 
 		{
+			GameState::Update();
+
 			if (Input::is_key_going_down(octet::key_esc))
 			{
 				gameStateMachineInterface->PopState();
 			}
 		}
 
-		void Render() override {};
+		void Render() override 
+		{
+			GameState::Render();
+		}
 	};
 }
 

@@ -9,8 +9,8 @@ namespace agarzonp
 
 		virtual~GameStateMachineInterface(){}
 
-		virtual void SetState(GameStateId gameStateId) = 0;
-		virtual void PushState(GameStateId gameStateId) = 0;
+		virtual void SetState(GameStateId gameStateId, GameStateParams* params = nullptr) = 0;
+		virtual void PushState(GameStateId gameStateId, GameStateParams* params = nullptr) = 0;
 		virtual void PopState() = 0;
 	};
 }
