@@ -18,10 +18,6 @@ namespace agarzonp
 			GameObject::OnCollisionWith(other);
 			Translate(20, 0);
 			
-			//octet::ALuint source = get_sound_source();
-			//octet::alSourcei(source, octet::AL_BUFFER, bang);
-			//octet::alSourcePlay(source);
-
 			// Invaderer wave code
 			//bombs_disabled = 50;
 			
@@ -43,6 +39,8 @@ namespace agarzonp
 			{
 				player->OnCollisionWith(this);
 				OnCollisionWith(player);
+
+				SoundManager::GetInstance()->Play(SoundId::BANG);
 
 				return;
 			}

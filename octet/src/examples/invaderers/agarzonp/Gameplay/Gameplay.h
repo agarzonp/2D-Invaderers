@@ -1,17 +1,24 @@
 #ifndef GAMEPLAY_H
 #define GAMEPLAY_H
 
+#include "../Sound/SoundManager.h"
 #include "GameStateMachine.h"	
 
 namespace agarzonp
 {
 	class Gameplay
 	{
+		SoundManager* soundManager;
+
 		GameStateMachine gameStateMachine;
 
 	public:
 
-		Gameplay() {}
+		Gameplay() 
+			: soundManager (nullptr)
+		{
+		}
+
 		~Gameplay() { Finish(); }
 
 		void Init(const octet::app& app)
@@ -19,6 +26,10 @@ namespace agarzonp
 			// Needed for getting the input across different game states
 			agarzonp::Input::SetInput(app);
 
+			// SoundManager
+			soundManager = SoundManager::GetInstance();
+				
+			// Set the first state
 			BattleStateParams* params = new BattleStateParams();
 			params->level = 0;
 
@@ -43,7 +54,10 @@ namespace agarzonp
 
 	private:
 
-		void Finish() {}
+		void Finish() 
+		{
+			delete soundManager;
+		}
 	};
 }
 

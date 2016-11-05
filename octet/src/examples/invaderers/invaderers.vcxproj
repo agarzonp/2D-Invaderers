@@ -246,6 +246,8 @@
     <ClInclude Include="agarzonp\Gameplay\States\PauseState.h" />
     <ClInclude Include="agarzonp\Gameplay\World.h" />
     <ClInclude Include="agarzonp\Input\Input.h" />
+    <ClInclude Include="agarzonp\Sound\SoundIds.h" />
+    <ClInclude Include="agarzonp\Sound\SoundManager.h" />
     <ClInclude Include="invaderers_app.h" />
   </ItemGroup>
   <ItemGroup>

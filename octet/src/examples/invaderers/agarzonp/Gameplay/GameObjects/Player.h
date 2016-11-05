@@ -76,9 +76,8 @@ namespace agarzonp
 				World::GetInstance()->AddGameObject(missile);
 
 				missiles_disabled = 5;
-				//octet::ALuint source = get_sound_source();
-				//octet::alSourcei(source, octet::AL_BUFFER, whoosh);
-				//octet::alSourcePlay(source);
+
+				SoundManager::GetInstance()->Play(SoundId::WHOOSH);
 			}
 		}
 

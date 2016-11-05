@@ -18,10 +18,6 @@ namespace agarzonp
 			GameObject::OnCollisionWith(gameOject);
 			Translate(20.0f, 0.0f);
 
-			//octet::ALuint source = get_sound_source();
-			//octet::alSourcei(source, octet::AL_BUFFER, bang);
-			//octet::alSourcePlay(source);
-
 			// InvadererWave code
 			/*
 			live_invaderers--;
@@ -54,6 +50,8 @@ namespace agarzonp
 				{
 					invaderer->OnCollisionWith(this);
 					OnCollisionWith(invaderer);
+
+					SoundManager::GetInstance()->Play(SoundId::BANG);
 
 					return;
 				}

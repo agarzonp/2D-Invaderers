@@ -54,6 +54,9 @@
     <Filter Include="Source Files\agarzonp\Gameplay\GameObjects">
       <UniqueIdentifier>{e838d88d-5309-441c-b260-66fd055a58dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\agarzonp\Sound">
+      <UniqueIdentifier>{6d0b2e25-397b-4733-bac7-eabbe8910f49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -537,6 +540,12 @@
     </ClInclude>
     <ClInclude Include="agarzonp\Gameplay\GameObjects\Border.h">
       <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Sound\SoundIds.h">
+      <Filter>Source Files\agarzonp\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Sound\SoundManager.h">
+      <Filter>Source Files\agarzonp\Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
