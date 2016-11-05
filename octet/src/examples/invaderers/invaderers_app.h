@@ -53,7 +53,19 @@ namespace octet {
 			enabled = true;
 		}
 
-		void render(texture_shader &shader, mat4t &cameraToWorld) {
+		void set(float x, float y, float w, float h) {
+			modelToWorld.loadIdentity();
+			modelToWorld.translate(x, y, 0);
+			halfWidth = w * 0.5f;
+			halfHeight = h * 0.5f;
+		}
+
+		void set(float x, float y) {
+			modelToWorld.loadIdentity();
+			modelToWorld.translate(x, y, 0);
+		}
+
+		void render(texture_shader &shader, const mat4t &cameraToWorld) {
 			// invisible sprite... used for gameplay.
 			if (!texture) return;
 
@@ -108,8 +120,56 @@ namespace octet {
 			modelToWorld.translate(x, y, 0);
 		}
 
+		// local rotate to calculate the new halfWidth hand halfHeight
+		/*
+		void local_rotate(float angle)
+		{
+			// rotate local coordinates...
+
+			octet::vec2 points[4];
+			points[0] = octet::vec2(-halfWidth, -halfHeight);
+			points[1] = octet::vec2(halfWidth, -halfHeight);
+			points[2] = octet::vec2(halfWidth, halfHeight);
+			points[3] = octet::vec2(-halfWidth, halfHeight);
+
+			angle = (angle * 3.14159265f) / 180.0f;
+
+			for (int i = 0; i < 4; i++)
+			{
+				octet::vec2& p = points[i];
+
+				float x = cosf(angle) * p.x() - sinf(angle) * p.y();
+				float y = sinf(angle) * p.x() + cosf(angle) * p.y();
+
+				p.x() = x;
+				p.y() = y;
+			}
+
+			// ...so we can adjust halfWidth and halfHeight
+
+			float minX = FLT_MAX;
+			float minY = FLT_MAX;
+			float maxX = FLT_MIN;
+			float maxY = FLT_MIN;
+			for (int i = 0; i < 4; i++)
+			{
+				octet::vec2& p = points[i];
+
+				minX = fminf(minX, p.x());
+				minY = fminf(minY, p.y());
+
+				maxX = fmaxf(maxX, p.x());
+				maxY = fmaxf(maxY, p.y());
+			}
+
+			halfWidth  = fabsf(maxX - minX) * 0.5f;
+			halfHeight = fabsf(maxY - minY) * 0.5f;
+			
+		}
+		*/
+
 		// position the object relative to another.
-		void set_relative(sprite &rhs, float x, float y) {
+		void set_relative(const sprite &rhs, float x, float y) {
 			modelToWorld = rhs.modelToWorld;
 			modelToWorld.translate(x, y, 0);
 		}

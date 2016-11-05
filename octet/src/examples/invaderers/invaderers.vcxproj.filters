@@ -48,6 +48,12 @@
     <Filter Include="Source Files\agarzonp\CSVParser">
       <UniqueIdentifier>{4d89be20-f80d-47bf-9eb9-af5844389a7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\agarzonp\Gameplay\Sprites">
+      <UniqueIdentifier>{86da4613-ae21-4b3f-a052-c8adff23340e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\agarzonp\Gameplay\GameObjects">
+      <UniqueIdentifier>{e838d88d-5309-441c-b260-66fd055a58dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -486,6 +492,51 @@
     </ClInclude>
     <ClInclude Include="agarzonp\Gameplay\States\GameStateParamsDefs.h">
       <Filter>Source Files\agarzonp\Gameplay\States</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\GameObject.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\Player.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\Sprites\SpritesDefs.h">
+      <Filter>Source Files\agarzonp\Gameplay\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\Invaderer.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\InvadererWave.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\Missile.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\Bomb.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\World.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjectPool.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjectPoolInterface.h">
+      <Filter>Source Files\agarzonp\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\GameObjectFactory.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\Sprites\SpritePool.h">
+      <Filter>Source Files\agarzonp\Gameplay\Sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\GameObjectDefs.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="agarzonp\Gameplay\GameObjects\Border.h">
+      <Filter>Source Files\agarzonp\Gameplay\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

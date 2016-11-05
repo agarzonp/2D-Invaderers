@@ -1,6 +1,14 @@
 #ifndef BATTLE_STATE_H
 #define BATTLE_STATE_H
 
+#include "../Sprites/SpritePool.h"
+#include "../Sprites/SpritesDefs.h"
+
+#include "../GameObjects/GameObject.h"
+#include "../World.h"
+#include "../GameObjects/GameObjectFactory.h"
+#include "../GameObjectPool.h"
+
 namespace agarzonp
 {
 	class BattleState : public GameState
@@ -12,39 +20,24 @@ namespace agarzonp
 		// shader to draw a textured triangle
 		octet::texture_shader texture_shader_;
 
-		enum {
+		// sprite pool
+		SpritePool* spritesPool;
+
+		// game object pool
+		GameObjectPool gameObjectPool;
+
+		// game object factory
+		GameObjectFactory* gameObjectFactory;
+
+		// World
+		World* world;
+		
+		enum
+		{
 			num_sound_sources = 8,
-			num_rows = 5,
-			num_cols = 10,
-			num_missiles = 2,
-			num_bombs = 2,
-			num_borders = 4,
-			num_invaderers = num_rows * num_cols,
-
-			// sprite definitions
-			first_border_sprite = 0,
-			last_border_sprite = first_border_sprite + num_borders - 1,
-			
-			game_over_sprite,
-
-			ship_sprite,
-			
-			first_missile_sprite,
-			last_missile_sprite = first_missile_sprite + num_missiles - 1,
-
-			first_bomb_sprite,
-			last_bomb_sprite = first_bomb_sprite + num_bombs - 1,
-
-			// FIXME: invaderers num sprites will be dynamic according to the level layout
-			first_invaderer_sprite,
-			last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
-
-			num_sprites,
-
 		};
 
-		// timers for missiles and bombs
-		int missiles_disabled;
+		// timers bombs
 		int bombs_disabled;
 
 		// accounting for bad guys
@@ -64,12 +57,6 @@ namespace agarzonp
 		unsigned cur_source;
 		octet::ALuint sources[num_sound_sources];
 
-		// big array of sprites
-		octet::sprite sprites[num_sprites];
-
-		// random number generator
-		class octet::random randomizer;
-
 		// a texture for our text
 		GLuint font_texture;
 
@@ -82,16 +69,34 @@ namespace agarzonp
 		BattleState(GameStateMachineInterface* gsmInterface) 
 			: GameState(gsmInterface)
 			, font(512, 256, "assets/big.fnt") 
+			, world(nullptr)
 		{
 		}
 
-		~BattleState() {}
+		~BattleState() 
+		{
+			delete spritesPool;
+			delete world;
+			delete gameObjectFactory;
+		}
 
 		void Start(GameStateParams* params) override
 		{
 			GameState::Start(params);
 
 			BattleStateParams* battleParams = static_cast<BattleStateParams*>(params);
+
+			// init sprite pool
+			spritesPool = SpritePool::GetInstance();
+			spritesPool->Init(SpriteDefs::num_sprites);
+
+			// init game object factory
+			gameObjectFactory = GameObjectFactory::GetInstance();
+			gameObjectFactory->SetPool(&gameObjectPool);
+
+			// init world
+			world = World::GetInstance();
+			world->SetPool(&gameObjectPool);
 
 			// set up the shader
 			texture_shader_.init();
@@ -102,37 +107,33 @@ namespace agarzonp
 
 			font_texture = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/big_0.gif");
 
-			GLuint ship = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/ship.gif");
-			sprites[ship_sprite].init(ship, 0, -2.75f, 0.25f, 0.25f);
-
 			GLuint GameOver = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/GameOver.gif");
-			sprites[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
+			(*spritesPool)[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
 
+			// create player
+			GameObject* player = GameObjectFactory::GetInstance()->CreatePlayer(&texture_shader_);
+			World::GetInstance()->AddGameObject(player);
+
+			// create enemies
 			LoadLevel(battleParams ? battleParams->level : 0);
 			
+			// create borders
 
-			// set the border to white for clarity
-			GLuint white = octet::resource_dict::get_texture_handle(GL_RGB, "#ffffff");
-			sprites[first_border_sprite + 0].init(white, 0, -3, 6, 0.2f);
-			sprites[first_border_sprite + 1].init(white, 0, 3, 6, 0.2f);
-			sprites[first_border_sprite + 2].init(white, -3, 0, 0.2f, 6);
-			sprites[first_border_sprite + 3].init(white, 3, 0, 0.2f, 6);
+			GameObject* border = GameObjectFactory::GetInstance()->CreateBorder(&texture_shader_);
+			border->GetSprite().set(0.0f, -3.0f);
+			World::GetInstance()->AddGameObject(border);
 
-			// use the missile texture
-			GLuint missile = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/missile.gif");
-			for (int i = 0; i != num_missiles; ++i) {
-				// create missiles off-screen
-				sprites[first_missile_sprite + i].init(missile, 20, 0, 0.0625f, 0.25f);
-				sprites[first_missile_sprite + i].is_enabled() = false;
-			}
+			border = GameObjectFactory::GetInstance()->CreateBorder(&texture_shader_);
+			border->GetSprite().set(0.0f, 3.0f);
+			World::GetInstance()->AddGameObject(border);
 
-			// use the bomb texture
-			GLuint bomb = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/bomb.gif");
-			for (int i = 0; i != num_bombs; ++i) {
-				// create bombs off-screen
-				sprites[first_bomb_sprite + i].init(bomb, 20, 0, 0.0625f, 0.25f);
-				sprites[first_bomb_sprite + i].is_enabled() = false;
-			}
+			border = GameObjectFactory::GetInstance()->CreateBorder(&texture_shader_);
+			border->GetSprite().set(-3.0f, 0.0f, 0.2f, 6.0f);
+			World::GetInstance()->AddGameObject(border);
+
+			border = GameObjectFactory::GetInstance()->CreateBorder(&texture_shader_);
+			border->GetSprite().set(3.0f, 0.0f, 0.2f, 6.0f);
+			World::GetInstance()->AddGameObject(border);
 
 			// sounds
 			whoosh = octet::resource_dict::get_sound_handle(octet::AL_FORMAT_MONO16, "assets/invaderers/whoosh.wav");
@@ -141,7 +142,6 @@ namespace agarzonp
 			octet::alGenSources(num_sound_sources, sources);
 
 			// sundry counters and game state.
-			missiles_disabled = 0;
 			bombs_disabled = 50;
 			invader_velocity = 0.01f;
 			live_invaderers = num_invaderers;
@@ -169,7 +169,8 @@ namespace agarzonp
 		{
 			GameState::Update();
 
-			if (game_over) {
+			if (game_over)
+			{
 				return;
 			}
 
@@ -179,32 +180,14 @@ namespace agarzonp
 				return;
 			}
 
-			move_ship();
-
-			fire_missiles();
-
-			fire_bombs();
-
-			move_missiles();
-
-			move_bombs();
-
-			move_invaders(invader_velocity, 0);
-
-			octet::sprite &border = sprites[first_border_sprite + (invader_velocity < 0 ? 2 : 3)];
-			if (invaders_collide(border)) {
-				invader_velocity = -invader_velocity;
-				move_invaders(invader_velocity, -0.1f);
-			}
+			World::GetInstance()->Update();
 		}
+
 		void Render() override 
 		{
 			GameState::Render();
 
-			// draw all the sprites
-			for (int i = 0; i != num_sprites; ++i) {
-				sprites[i].render(texture_shader_, cameraToWorld);
-			}
+			World::GetInstance()->Render(cameraToWorld);
 
 			char score_text[32];
 			sprintf(score_text, "score: %d   lives: %d\n", score, num_lives);
@@ -217,175 +200,7 @@ namespace agarzonp
 
 		
 private:
-			// called when we hit an enemy
-			void on_hit_invaderer() {
-				octet::ALuint source = get_sound_source();
-				octet::alSourcei(source, octet::AL_BUFFER, bang);
-				octet::alSourcePlay(source);
-
-				live_invaderers--;
-				score++;
-				if (live_invaderers == 4) {
-					invader_velocity *= 4;
-				}
-				else if (live_invaderers == 0) {
-					game_over = true;
-					sprites[game_over_sprite].translate(-20, 0);
-				}
-			}
-
-			// called when we are hit
-			void on_hit_ship() {
-				octet::ALuint source = get_sound_source();
-				octet::alSourcei(source, octet::AL_BUFFER, bang);
-				octet::alSourcePlay(source);
-
-				if (--num_lives == 0) {
-					game_over = true;
-					sprites[game_over_sprite].translate(-20, 0);
-				}
-			}
-
-			// use the keyboard to move the ship
-			void move_ship() {
-				const float ship_speed = 0.05f;
-				// left and right arrows
-				if (Input::is_key_down(octet::key_left)) {
-					sprites[ship_sprite].translate(-ship_speed, 0);
-					if (sprites[ship_sprite].collides_with(sprites[first_border_sprite + 2])) {
-						sprites[ship_sprite].translate(+ship_speed, 0);
-					}
-				}
-				else if (Input::is_key_down(octet::key_right)) {
-					sprites[ship_sprite].translate(+ship_speed, 0);
-					if (sprites[ship_sprite].collides_with(sprites[first_border_sprite + 3])) {
-						sprites[ship_sprite].translate(-ship_speed, 0);
-					}
-				}
-			}
-
-			// fire button (space)
-			void fire_missiles() {
-				if (missiles_disabled) {
-					--missiles_disabled;
-				}
-				else if (Input::is_key_going_down(' ')) {
-					// find a missile
-					for (int i = 0; i != num_missiles; ++i) {
-						if (!sprites[first_missile_sprite + i].is_enabled()) {
-							sprites[first_missile_sprite + i].set_relative(sprites[ship_sprite], 0, 0.5f);
-							sprites[first_missile_sprite + i].is_enabled() = true;
-							missiles_disabled = 5;
-							octet::ALuint source = get_sound_source();
-							octet::alSourcei(source, octet::AL_BUFFER, whoosh);
-							octet::alSourcePlay(source);
-							break;
-						}
-					}
-				}
-			}
-
-			// pick and invader and fire a bomb
-			void fire_bombs() {
-				if (bombs_disabled) {
-					--bombs_disabled;
-				}
-				else {
-					// find an invaderer
-					octet::sprite &ship = sprites[ship_sprite];
-					for (int j = randomizer.get(0, num_invaderers); j < num_invaderers; ++j) {
-						octet::sprite &invaderer = sprites[first_invaderer_sprite + j];
-						if (invaderer.is_enabled() && invaderer.is_above(ship, 0.3f)) {
-							// find a bomb
-							for (int i = 0; i != num_bombs; ++i) {
-								if (!sprites[first_bomb_sprite + i].is_enabled()) {
-									sprites[first_bomb_sprite + i].set_relative(invaderer, 0, -0.25f);
-									sprites[first_bomb_sprite + i].is_enabled() = true;
-									bombs_disabled = 30;
-									octet::ALuint source = get_sound_source();
-									octet::alSourcei(source, octet::AL_BUFFER, whoosh);
-									octet::alSourcePlay(source);
-									return;
-								}
-							}
-							return;
-						}
-					}
-				}
-			}
-
-			// animate the missiles
-			void move_missiles() {
-				const float missile_speed = 0.3f;
-				for (int i = 0; i != num_missiles; ++i) {
-					octet::sprite &missile = sprites[first_missile_sprite + i];
-					if (missile.is_enabled()) {
-						missile.translate(0, missile_speed);
-						for (int j = 0; j != num_invaderers; ++j) {
-							octet::sprite &invaderer = sprites[first_invaderer_sprite + j];
-							if (invaderer.is_enabled() && missile.collides_with(invaderer)) {
-								invaderer.is_enabled() = false;
-								invaderer.translate(20, 0);
-								missile.is_enabled() = false;
-								missile.translate(20, 0);
-								on_hit_invaderer();
-
-								goto next_missile;
-							}
-						}
-						if (missile.collides_with(sprites[first_border_sprite + 1])) {
-							missile.is_enabled() = false;
-							missile.translate(20, 0);
-						}
-					}
-				next_missile:;
-				}
-			}
-
-			// animate the bombs
-			void move_bombs() {
-				const float bomb_speed = 0.2f;
-				for (int i = 0; i != num_bombs; ++i) {
-					octet::sprite &bomb = sprites[first_bomb_sprite + i];
-					if (bomb.is_enabled()) {
-						bomb.translate(0, -bomb_speed);
-						if (bomb.collides_with(sprites[ship_sprite])) {
-							bomb.is_enabled() = false;
-							bomb.translate(20, 0);
-							bombs_disabled = 50;
-							on_hit_ship();
-							goto next_bomb;
-						}
-						if (bomb.collides_with(sprites[first_border_sprite + 0])) {
-							bomb.is_enabled() = false;
-							bomb.translate(20, 0);
-						}
-					}
-				next_bomb:;
-				}
-			}
-
-			// move the array of enemies
-			void move_invaders(float dx, float dy) {
-				for (int j = 0; j != num_invaderers; ++j) {
-					octet::sprite &invaderer = sprites[first_invaderer_sprite + j];
-					if (invaderer.is_enabled()) {
-						invaderer.translate(dx, dy);
-					}
-				}
-			}
-
-			// check if any invaders hit the sides.
-			bool invaders_collide(octet::sprite &border) {
-				for (int j = 0; j != num_invaderers; ++j) {
-					octet::sprite &invaderer = sprites[first_invaderer_sprite + j];
-					if (invaderer.is_enabled() && invaderer.collides_with(border)) {
-						return true;
-					}
-				}
-				return false;
-			}
-
+			
 			enum class LevelLoaderResult : uint8_t
 			{
 				LOADED,
@@ -426,17 +241,20 @@ private:
 					size_t numCols = csvParser.NumCols();
 
 					int maxNumEnemies = int(numRows * numCols);
-					if (maxNumEnemies > num_sprites)
+					if (maxNumEnemies > GameObjectDefs::num_invaderers)
 					{
-						assert(false);
-						// FIXME: The sprite pool needs to be resized!
+						// FIXME: Increase the invaderers pool
+						assert(false);	
 					}
 
 					if (numRows > 0 && numCols > 0)
 					{
-						bool success = true;
+						InvadererWave* wave = new InvadererWave(); // This is never freed!
+						wave->SetIsInUse(true);
+						wave->AddShader(&texture_shader_);
+						World::GetInstance()->AddGameObject(wave);
 
-						unsigned spriteIndex = first_invaderer_sprite;
+						bool success = true;
 
 						for (size_t row = 0; row < numRows; row++)
 						{
@@ -471,9 +289,9 @@ private:
 								// get the size of the enemy
 								p++;
 								int enemySize = atoi(p);
-								CreateEnemy(spriteIndex, enemyType.c_str(), float(enemySize), row, col);
 
-								spriteIndex++;
+								GameObject* invaderer = GameObjectFactory::GetInstance()->CreateInvaderer(&texture_shader_, enemyType.c_str(), float(enemySize), row, col);
+								wave->AddInvaderer(static_cast<Invaderer*>(invaderer));
 							}
 						}
 							
@@ -484,28 +302,6 @@ private:
 				}
 
 				return LevelLoaderResult::NOT_LOADED_LEVEL_NOT_FOUND;
-			}
-
-			void CreateEnemy(unsigned spriteIndex, const char* enemyType, float size, size_t row, size_t col)
-			{
-				static GLuint invaderer = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
-			
-				static float oneSizeWidth = 0.5f;
-				static float halfOneSizeWidth = oneSizeWidth * 0.5f;
-				float width = size  * oneSizeWidth;
-				float height = size * oneSizeWidth;
-				float sizeOffset = float(size - 1) * halfOneSizeWidth;
-				float x = (float)(col - num_cols * 0.5f) * 0.5f + sizeOffset;
-				float y = 2.50f - ((float)row * 0.5f) - sizeOffset;
-
-				assert(spriteIndex < num_sprites);
-				if (spriteIndex < num_sprites)
-				{
-					sprites[spriteIndex].init
-					(
-						invaderer, x, y, width, height
-					);
-				}
 			}
 
 			void draw_text(octet::texture_shader &shader, float x, float y, float scale, const char *text) {
