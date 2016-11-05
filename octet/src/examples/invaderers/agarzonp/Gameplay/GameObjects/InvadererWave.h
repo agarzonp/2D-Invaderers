@@ -100,9 +100,7 @@ namespace agarzonp
 
 						bombs_disabled = 30;
 
-						//octet::ALuint source = get_sound_source();
-						//octet::alSourcei(source, octet::AL_BUFFER, whoosh);
-						//octet::alSourcePlay(source);
+						SoundManager::GetInstance()->Play(SoundId::WHOOSH);
 
 						return;
 					}
