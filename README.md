@@ -79,9 +79,14 @@ game object is requested, it must be added to the World to make sure that is goi
 
 - Data-driven
 
-CSV file format parser is use to read any game configuration. 
+CSV file format parser is used to read any game configuration. 
 
 For this project, it is used to load the level and create the different invaderers.
+
+- Sounds
+
+Any sound to be used in the game, must be registered in SoundIds.h
+The id given to the sound is the one that is used to play any sound from anywhere in the code by the SoundManager
 
 
 
