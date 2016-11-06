@@ -95,7 +95,11 @@ Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,
 - Sounds
 
 Any sound to be used in the game, must be registered in SoundIds.h
-The id given to the sound is the one that is used to play any sound from anywhere in the code by the SoundManager
+The id given to the sound is the one that is used to play any sound from anywhere in the code by the SoundManager.
+
+## Gameplay features
+
+TO-DO
 
 
 
