@@ -40,6 +40,11 @@ namespace agarzonp
 		{
 			inUse = isInUse;
 		}
+		
+		virtual void Reset()
+		{
+
+		}
 
 		virtual void Update() = 0;
 

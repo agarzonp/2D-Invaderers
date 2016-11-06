@@ -23,6 +23,11 @@ namespace agarzonp
 
 	public:
 
+		~GameObjectFactory()
+		{
+			s_instance = nullptr;
+		}
+
 		static GameObjectFactory* GetInstance()
 		{
 			if (!s_instance)
@@ -88,6 +93,7 @@ namespace agarzonp
 		GameObject* CreateInvadererWave(octet::shaders::texture_shader* shader)
 		{
 			GameObject* wave = pool->GetInvadererWave();
+			wave->Reset();
 			wave->AddShader(shader);
 
 			return wave;

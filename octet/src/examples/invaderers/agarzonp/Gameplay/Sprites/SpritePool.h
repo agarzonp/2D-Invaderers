@@ -37,6 +37,7 @@ namespace agarzonp
 		~SpritePool()
 		{
 			delete[] sprites;
+			s_instance = nullptr;
 		}
 
 		void Init(int size)

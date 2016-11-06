@@ -14,17 +14,26 @@ namespace agarzonp
 	public:
 
 		InvadererWave()
-			: bombs_disabled(50)
-			, velocity(0.01f, 0.0f)
 		{
+			Reset();
 		}
 
 		~InvadererWave()
 		{
+			SetIsInUse(false);
+			Reset();
+		}
+
+		void Reset() override
+		{
+			bombs_disabled = 50,
+			velocity = octet::vec2(0.01f, 0.0f);
+
 			for (GameObject* invaderer : invaderers)
 			{
 				invaderer->SetIsInUse(false);
 			}
+			invaderers.resize(0);
 		}
 
 		void OnGameObjectHit(GameObject* gameObject)

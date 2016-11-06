@@ -41,6 +41,11 @@ namespace agarzonp
 			return s_instance;
 		}
 
+		~SoundManager()
+		{
+			s_instance = nullptr;
+		}
+
 		void Init()
 		{
 			cur_source = 0;

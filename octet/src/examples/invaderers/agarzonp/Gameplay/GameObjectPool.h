@@ -24,8 +24,8 @@ namespace agarzonp
 			missiles.resize(GameObjectDefs::num_missiles);
 			bombs.resize(GameObjectDefs::num_bombs);
 			borders.resize(GameObjectDefs::num_borders);
+			invadererWaves.resize(GameObjectDefs::num_invaderer_waves);
 			invaderers.resize(GameObjectDefs::num_invaderers);
-			invadererWaves.resize(GameObjectDefs::num_invaderers);
 			players.resize(GameObjectDefs::num_players);
 		}
 
