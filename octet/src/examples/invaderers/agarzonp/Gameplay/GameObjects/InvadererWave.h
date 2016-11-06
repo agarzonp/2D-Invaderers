@@ -7,7 +7,7 @@ namespace agarzonp
 	{
 		int bombs_disabled;
 		octet::vec2 velocity;
-		octet::containers::dynarray<Invaderer*> invaderers;
+		octet::containers::dynarray<GameObject*> invaderers;
 
 		class octet::random randomizer;
 
@@ -21,34 +21,48 @@ namespace agarzonp
 
 		~InvadererWave()
 		{
-			for (Invaderer* invaderer : invaderers)
+			for (GameObject* invaderer : invaderers)
 			{
 				invaderer->SetIsInUse(false);
 			}
 		}
 
-		void AddInvaderer(Invaderer* invaderer)
+		void OnGameObjectHit(GameObject* gameObject)
 		{
-			invaderers.push_back(invaderer);
+			bombs_disabled = 50;
+		}
+
+		void AddChild(GameObject* child) override
+		{
+			invaderers.push_back(child);
 		}
 
 
 		void Update() override
 		{
-			for (Invaderer* invaderer : invaderers)
+			int aliveInvaderes = 0;
+
+			for (GameObject* invaderer : invaderers)
 			{
+				invaderer->IsInUse() ? aliveInvaderes += 1 : 0;
+
 				invaderer->Update();
 			}
 
 			Move();
 			Fire();
 
-			
+			UpdateVelocity(aliveInvaderes);
+
+			if (aliveInvaderes == 0)
+			{
+				World::GetInstance()->SetState(WorldState::WORLD_STATE_WIN);
+			}
 		}
 
 		void Render(const octet::math::mat4t& cameraToWorld) override
 		{
-			for (Invaderer* invaderer : invaderers)
+			for (GameObject* invaderer : invaderers)
 			{
 				invaderer->Render(cameraToWorld);
 			}
@@ -56,12 +70,21 @@ namespace agarzonp
 
 	private:
 
+		void UpdateVelocity(int aliveInvaderes)
+		{
+			// FIXME: velocity bug
+			//if (aliveInvaderes <= 16)
+			//{
+			//	velocity.x() *= 4;
+			//}
+		}
+
 		void Move()
 		{
 			int borderIndex = velocity.x() < 0 ? GameObjectDefs::left_border_object : GameObjectDefs::right_border_object;
 			GameObject* border = World::GetInstance()->GetPool()->GetBorder(borderIndex);
 
-			for (Invaderer* invaderer : invaderers)
+			for (GameObject* invaderer : invaderers)
 			{
 				if (invaderer->CollidesWith(border))
 				{
@@ -71,7 +94,7 @@ namespace agarzonp
 				}
 			}
 
-			for (Invaderer* invaderer : invaderers)
+			for (GameObject* invaderer : invaderers)
 			{
 				invaderer->Translate(velocity.x(), velocity.y());
 			}
@@ -94,7 +117,7 @@ namespace agarzonp
 					GameObject* invaderer = invaderers[j];
 					if (invaderer->IsInUse() && invaderer->IsAbove(player, 0.3f))
 					{
-						GameObject* bomb = GameObjectFactory::GetInstance()->CreateBomb(shader);
+						GameObject* bomb = GameObjectFactory::GetInstance()->CreateBomb(this, shader);
 						bomb->SetRelativeTo(invaderer, 0.0f, -0.25f);
 						World::GetInstance()->AddGameObject(bomb);
 

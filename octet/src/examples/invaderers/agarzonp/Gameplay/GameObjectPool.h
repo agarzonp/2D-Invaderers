@@ -14,6 +14,7 @@ namespace agarzonp
 		octet::containers::dynarray<Bomb> bombs;
 		octet::containers::dynarray<Border> borders;
 		octet::containers::dynarray<Invaderer> invaderers;
+		octet::containers::dynarray<InvadererWave> invadererWaves;
 		octet::containers::dynarray<Player> players;
 
 	public:
@@ -24,6 +25,7 @@ namespace agarzonp
 			bombs.resize(GameObjectDefs::num_bombs);
 			borders.resize(GameObjectDefs::num_borders);
 			invaderers.resize(GameObjectDefs::num_invaderers);
+			invadererWaves.resize(GameObjectDefs::num_invaderers);
 			players.resize(GameObjectDefs::num_players);
 		}
 
@@ -65,6 +67,16 @@ namespace agarzonp
 		GameObject* GetInvaderer(unsigned index) final
 		{
 			return GetGameObject(index, invaderers);
+		}
+
+		GameObject* GetInvadererWave() final
+		{
+			return GetFreeObject(invadererWaves);
+		}
+
+		GameObject* GetInvadererWave(unsigned index) final
+		{
+			return GetGameObject(index, invadererWaves);
 		}
 		
 		GameObject* GetPlayer() final

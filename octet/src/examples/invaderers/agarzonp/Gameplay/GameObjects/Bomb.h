@@ -17,11 +17,6 @@ namespace agarzonp
 		{
 			GameObject::OnCollisionWith(other);
 			Translate(20, 0);
-			
-			// Invaderer wave code
-			//bombs_disabled = 50;
-			
-			// player
 		}
 
 	private:
@@ -39,6 +34,9 @@ namespace agarzonp
 			{
 				player->OnCollisionWith(this);
 				OnCollisionWith(player);
+
+				// tell the triggerer that you hit the player
+				triggerer->OnGameObjectHit(player);
 
 				SoundManager::GetInstance()->Play(SoundId::BANG);
 

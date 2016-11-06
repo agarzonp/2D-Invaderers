@@ -547,6 +547,9 @@
     <ClInclude Include="agarzonp\Sound\SoundManager.h">
       <Filter>Source Files\agarzonp\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="agarzonp\Render\DrawText.h">
+      <Filter>Source Files\agarzonp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\resources\mesh_builder.inl">

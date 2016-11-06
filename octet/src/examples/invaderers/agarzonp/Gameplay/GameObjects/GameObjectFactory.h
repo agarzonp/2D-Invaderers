@@ -50,22 +50,24 @@ namespace agarzonp
 			return border;
 		}
 
-		GameObject* CreateMissile(octet::shaders::texture_shader* shader)
+		GameObject* CreateMissile(GameObject* triggerer, octet::shaders::texture_shader* shader)
 		{
 			static GLuint texture = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/missile.gif");
 
 			GameObject* missile = pool->GetMissile();
+			missile->SetTriggerer(triggerer);
 			missile->GetSprite().init(texture, 20, 0, 0.0625f, 0.25f);
 			missile->AddShader(shader);
 
 			return missile;
 		}
 
-		GameObject* CreateBomb(octet::shaders::texture_shader* shader)
+		GameObject* CreateBomb(GameObject* triggerer, octet::shaders::texture_shader* shader)
 		{
 			static GLuint texture = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/bomb.gif");
 
 			GameObject* bomb = pool->GetBomb();
+			bomb->SetTriggerer(triggerer);
 			bomb->GetSprite().init(texture, 20, 0, 0.0625f, 0.25f);
 			bomb->AddShader(shader);
 
@@ -81,6 +83,14 @@ namespace agarzonp
 			player->AddShader(shader);
 
 			return player;
+		}
+
+		GameObject* CreateInvadererWave(octet::shaders::texture_shader* shader)
+		{
+			GameObject* wave = pool->GetInvadererWave();
+			wave->AddShader(shader);
+
+			return wave;
 		}
 
 		GameObject* CreateInvaderer(octet::shaders::texture_shader* shader, const char* enemyType, float size, size_t row, size_t col)

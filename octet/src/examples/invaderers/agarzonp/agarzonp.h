@@ -12,6 +12,7 @@
 #include "CSVParser/CSVParser.h"
 #include "Input/Input.h"
 #include "Sound/SoundManager.h"
+#include "Render/DrawText.h"
 #include "Gameplay/Gameplay.h"
 
 #endif // !AGARZONP_H

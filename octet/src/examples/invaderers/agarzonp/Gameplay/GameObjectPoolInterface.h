@@ -23,6 +23,9 @@ namespace agarzonp
 		virtual GameObject* GetInvaderer() = 0;
 		virtual GameObject* GetInvaderer(unsigned index) = 0;
 
+		virtual GameObject* GetInvadererWave() = 0;
+		virtual GameObject* GetInvadererWave(unsigned index) = 0;
+
 		virtual GameObject* GetPlayer() = 0;
 		virtual GameObject* GetPlayer(unsigned index) = 0;
 	};

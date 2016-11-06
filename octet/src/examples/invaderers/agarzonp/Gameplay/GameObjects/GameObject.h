@@ -13,6 +13,9 @@ namespace agarzonp
 
 		bool inUse;
 
+		// The GameObject that triggers the current GameObject
+		GameObject* triggerer;
+
 	public:
 
 		GameObject()
@@ -48,6 +51,16 @@ namespace agarzonp
 			}
 		}
 
+		virtual void AddChild(GameObject* child)
+		{
+		}
+
+
+		void SetTriggerer(GameObject* triggerer_)
+		{
+			triggerer = triggerer_;
+		}
+
 		void AddShader(octet::shaders::texture_shader* _shader)
 		{
 			assert(_shader);
@@ -68,6 +81,11 @@ namespace agarzonp
 		virtual void OnCollisionWith(const GameObject* other)
 		{
 			SetIsInUse(false);
+		}
+
+		virtual void OnGameObjectHit(GameObject* other)
+		{
+
 		}
 
 		void SetRelativeTo(const GameObject* other, float x, float y)

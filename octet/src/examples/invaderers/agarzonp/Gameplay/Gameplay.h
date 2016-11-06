@@ -2,6 +2,7 @@
 #define GAMEPLAY_H
 
 #include "../Sound/SoundManager.h"
+#include "../Render/DrawText.h"
 #include "GameStateMachine.h"	
 
 namespace agarzonp
@@ -9,6 +10,7 @@ namespace agarzonp
 	class Gameplay
 	{
 		SoundManager* soundManager;
+		TextDrawer* textDrawer;
 
 		GameStateMachine gameStateMachine;
 
@@ -16,6 +18,7 @@ namespace agarzonp
 
 		Gameplay() 
 			: soundManager (nullptr)
+			, textDrawer(nullptr)
 		{
 		}
 
@@ -29,6 +32,9 @@ namespace agarzonp
 			// SoundManager
 			soundManager = SoundManager::GetInstance();
 				
+			// TextDrawer
+			textDrawer = TextDrawer::GetInstance();
+
 			// Set the first state
 			BattleStateParams* params = new BattleStateParams();
 			params->level = 0;
@@ -57,6 +63,7 @@ namespace agarzonp
 		void Finish() 
 		{
 			delete soundManager;
+			delete textDrawer;
 		}
 	};
 }

@@ -5,6 +5,7 @@ namespace agarzonp
 {
 	class Missile : public GameObject
 	{
+
 	public:
 
 		void Update() override
@@ -17,19 +18,6 @@ namespace agarzonp
 		{
 			GameObject::OnCollisionWith(gameOject);
 			Translate(20.0f, 0.0f);
-
-			// InvadererWave code
-			/*
-			live_invaderers--;
-			score++;
-			if (live_invaderers == 4) {
-				invader_velocity *= 4;
-			}
-			else if (live_invaderers == 0) {
-				game_over = true;
-				(*spritesPool)[game_over_sprite].translate(-20, 0);
-			}
-			*/
 		}
 
 	private:
@@ -50,6 +38,9 @@ namespace agarzonp
 				{
 					invaderer->OnCollisionWith(this);
 					OnCollisionWith(invaderer);
+
+					// tell the triggerer that you hit an invaderer
+					triggerer->OnGameObjectHit(invaderer);
 
 					SoundManager::GetInstance()->Play(SoundId::BANG);
 

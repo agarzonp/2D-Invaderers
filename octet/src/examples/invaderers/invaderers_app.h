@@ -67,7 +67,7 @@ namespace octet {
 
 		void render(texture_shader &shader, const mat4t &cameraToWorld) {
 			// invisible sprite... used for gameplay.
-			if (!texture) return;
+			if (!texture || !enabled) return;
 
 			// build a projection matrix: model -> world -> camera -> projection
 			// the projection space is the cube -1 <= x/w, y/w, z/w <= 1
@@ -205,6 +205,42 @@ namespace octet {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+}
+
+namespace octet
+{
+	void draw_text(octet::texture_shader &shader, const octet::mat4t& cameraToWorld, octet::bitmap_font& font, GLuint font_texture, float x, float y, float scale, const char *text) {
+		octet::mat4t modelToWorld;
+		modelToWorld.loadIdentity();
+		modelToWorld.translate(x, y, 0);
+		modelToWorld.scale(scale, scale, 1);
+		octet::mat4t modelToProjection = octet::mat4t::build_projection_matrix(modelToWorld, cameraToWorld);
+
+		/*mat4t tmp;
+		glLoadIdentity();
+		glTranslatef(x, y, 0);
+		glGetFloatv(GL_MODELVIEW_MATRIX, (float*)&tmp);
+		glScalef(scale, scale, 1);
+		glGetFloatv(GL_MODELVIEW_MATRIX, (float*)&tmp);*/
+
+		enum { max_quads = 32 };
+		octet::bitmap_font::vertex vertices[max_quads * 4];
+		uint32_t indices[max_quads * 6];
+		octet::aabb bb(octet::vec3(0, 0, 0), octet::vec3(256, 256, 0));
+
+		unsigned num_quads = font.build_mesh(bb, vertices, indices, max_quads, text, 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, font_texture);
+
+		shader.render(modelToProjection, 0);
+
+		glVertexAttribPointer(octet::attribute_pos, 3, GL_FLOAT, GL_FALSE, sizeof(octet::bitmap_font::vertex), (void*)&vertices[0].x);
+		glEnableVertexAttribArray(octet::attribute_pos);
+		glVertexAttribPointer(octet::attribute_uv, 3, GL_FLOAT, GL_FALSE, sizeof(octet::bitmap_font::vertex), (void*)&vertices[0].u);
+		glEnableVertexAttribArray(octet::attribute_uv);
+
+		glDrawElements(GL_TRIANGLES, num_quads * 6, GL_UNSIGNED_INT, indices);
+	}
 }
 
 #include "agarzonp/agarzonp.h"

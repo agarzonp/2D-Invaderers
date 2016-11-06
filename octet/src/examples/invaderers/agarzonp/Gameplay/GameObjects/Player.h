@@ -6,15 +6,27 @@ namespace agarzonp
 	class Player : public GameObject
 	{
 		int missiles_disabled;
-		int num_lives;
+		int lives;
+		int score;
 
 	public:
 
 		Player()
 			: GameObject()
 			, missiles_disabled(0)
-			, num_lives(3)
+			, lives(3)
+			, score(0)
 		{
+		}
+
+		int GetLives()
+		{
+			return lives;
+		}
+
+		int GetScore()
+		{
+			return score;
 		}
 
 		void Update() override
@@ -23,15 +35,32 @@ namespace agarzonp
 			Fire();
 		}
 
+		void Render(const octet::math::mat4t& cameraToWorld) override
+		{
+			if (inUse)
+			{
+				GameObject::Render(cameraToWorld);
+
+				// Definitely not the best play to draw this!
+				char score_text[32];
+				sprintf(score_text, "score: %d   lives: %d\n", score, lives);
+				TextDrawer::GetInstance()->Draw(*shader, cameraToWorld, -1.75f, 2, 1.0f / 256, score_text);
+			}
+		}
+
 		void OnCollisionWith(const GameObject* other) override
 		{
-			--num_lives;
+			--lives;
 
-			if (num_lives <= 0)
+			if (lives <= 0)
 			{
-				// World code
-				//game_over = true;
+				World::GetInstance()->SetState(WorldState::WORLD_STATE_OVER);
 			}
+		}
+
+		void OnGameObjectHit(GameObject* other) override
+		{
+			score++;
 		}
 
 	private:
@@ -71,7 +100,7 @@ namespace agarzonp
 			{
 				// find a missile
 				
-				GameObject* missile = GameObjectFactory::GetInstance()->CreateMissile(shader);
+				GameObject* missile = GameObjectFactory::GetInstance()->CreateMissile(this, shader);
 				missile->SetRelativeTo(this, 0, 0.5f);
 				World::GetInstance()->AddGameObject(missile);
 
