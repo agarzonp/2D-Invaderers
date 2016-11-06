@@ -44,9 +44,11 @@ object to any app and with minor tweaks under GamePlay folder create different g
 - GameStateMachine and GameState
 
 The overall gameplay code is ruled by a GameStateMachine that handles stackable GameStates. The GameStateMachine
-is responsible for creating the game states, updating the top most state and rendering all the states.
+is responsible for creating the game states, updating the top most state and rendering all the states. Each state must
+be registered in GameStatesIds.h with an id. The game state id is the one that is used to create and transition to that
+specific state.
 
-Transitions between the states is handle by different states according to input, gameplay logic.
+Transitions between the states is handle by different states according to input, gameplay logic, etc.
 
 Each specific state must inherits from GameState. For this project, three are the states that has been implemented: 
 
@@ -81,7 +83,14 @@ game object is requested, it must be added to the World to make sure that is goi
 
 CSV file format parser is used to read any game configuration. 
 
-For this project, it is used to load the level and create the different invaderers.
+For this project, it is used to load the level and create the different invaderers. An example of a level is shown below:
+
+Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_2,
+Invader_1,Invader_1,Invader_1,Invader_1,Invader_3,,,Invader_1,,
+Invader_2,,Invader_1,Invader_1,,,,Invader_1,Invader_1,
+,,Invader_1,Invader_1,,,,Invader_1,Invader_1,
+Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1,Invader_1
+,Invader_1,,Invader_1,Invader_1,,Invader_1,Invader_1,,
 
 - Sounds
 
