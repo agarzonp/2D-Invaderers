@@ -1,11 +1,11 @@
 # 2D-Invaderers
 
-- Brief
+## Brief
 
 A 2D invaderers game implemented with the octet framework. The framework is available 
 in https://github.com/andy-thomason/octet
 
-- Project location and structure
+## Project location and structure
 
 The project is located in src/examples/invaderers and it is based on the one that is
 located in src/examples/example_invaderers. 
@@ -23,7 +23,7 @@ This project structure has been designed with the purpose to reuse as much as co
 when it comes to develop gameplay logic with octet. In part, thanks to the architecture implemented
 too.
 
-- Architecture
+## Architecture
 
 The example that this project is based on, contains all the game logic in one monoholitic
 class. This clearly is not a good software design approach from a maintainability, flexibility and 
@@ -35,13 +35,13 @@ The main challenge when implementing this architecture has been to deal with all
 that arose because of octet´s one compilation unit approach. Because no cpp file was used, forward declare
 the classes wasn´t enough. The use of interfaces to communicate with the dependencies fixed the problem.
 
-Octet app and Gameplay
+- Octet app and Gameplay
 
 The octet app (invaderers_app.h) has been completely modified to just keep an instance of GamePlay. 
 This instance is the one responsible to update/render all the game. In theory, we could attach a GamePlay
 object to any app and with minor tweaks under GamePlay folder create different games using the same architecture.
 
-GameStateMachine and GameState
+- GameStateMachine and GameState
 
 The overall gameplay code is ruled by a GameStateMachine that handles stackable GameStates. The GameStateMachine
 is responsible for creating the game states, updating the top most state and rendering all the states.
@@ -57,7 +57,7 @@ state is by pressing the key_f1.
 
 Additionally, each game state has the ability to receive any initialization parameter if needed.
 
-GameObjects
+- GameObjects
 
 Any entity that needs some kind of gameplay logic or collisions must need to inherit from this class and override
 the corresponding methods. For example, we have Player, Missile, Invaderer and much more classes that inherits from
@@ -65,7 +65,7 @@ GameOject and override specific methods to implement their own behaviours.
 
 Each GameObject has an octet sprite that uses to render the sprite attached to the object.
 
-GameObjectPool, GameObjectFactory and World
+- GameObjectPool, GameObjectFactory and World
 
 GameObjectPool keeps different pools for each game object in the game, so there is no need to create game objects dynamically.
 Gameplay logic is responsible to set the inUse variable of each game object to make sure that an object is active or not. The pool
@@ -77,7 +77,7 @@ get game objects from the pool, when a new game object is created.
 The World is the class responsible to load the level and create the different game objects by using the factory. Any time a new
 game object is requested, it must be added to the World to make sure that is going to be updated/rendered.
 
-Data-driven
+- Data-driven
 
 CSV file format parser is use to read any game configuration. 
 
