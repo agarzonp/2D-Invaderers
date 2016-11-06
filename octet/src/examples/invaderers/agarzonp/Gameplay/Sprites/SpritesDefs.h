@@ -6,6 +6,7 @@ namespace agarzonp
 	enum SpriteDefs
 	{
 		game_over_sprite = 0,
+		win_sprite,
 
 		num_sprites
 	};

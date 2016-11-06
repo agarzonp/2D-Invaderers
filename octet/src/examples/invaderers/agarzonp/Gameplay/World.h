@@ -41,6 +41,9 @@ namespace agarzonp
 		{
 			assert(!s_instance);
 			s_instance = this;
+
+			// set up the shader
+			texture_shader_.init();
 		}
 
 	public:
@@ -58,6 +61,7 @@ namespace agarzonp
 		~World()
 		{
 			delete gameObjectFactory;
+			s_instance = nullptr;
 		}
 
 		void SetPool(GameObjectPoolInterface* pool)
@@ -118,8 +122,7 @@ namespace agarzonp
 
 		void Load(int level)
 		{
-			// set up the shader
-			texture_shader_.init();
+			Reset();
 
 			// create player
 			GameObject* player = GameObjectFactory::GetInstance()->CreatePlayer(&texture_shader_);
@@ -148,6 +151,19 @@ namespace agarzonp
 		}
 
 	private:
+
+		void Reset()
+		{
+			SetState(WorldState::WORLD_STATE_RUNNING);
+
+			// make all game objects available again
+			for (GameObject* gameObject : gameObjects)
+			{
+				gameObject->SetIsInUse(false);
+			}
+
+			gameObjects.resize(0);
+		}
 
 		enum class LevelLoaderResult : uint8_t
 		{
