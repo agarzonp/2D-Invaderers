@@ -25,15 +25,26 @@ namespace agarzonp
 			invadererType = type;
 		}
 
+		const InvadererType& GetType()
+		{
+			return invadererType;
+		}
+
 		void Update() override
 		{
+			
 		}
 
 		void OnCollisionWith(const GameObject* other) override
 		{
-			GameObject::OnCollisionWith(other);
+			invadererType.lives -= 1;
 
-			Translate(20.0f, 0.0f);
+			if (invadererType.lives <= 0)
+			{
+				SetIsInUse(false);
+
+				Translate(20.0f, 0.0f);
+			}
 		}
 
 	private:

@@ -60,7 +60,15 @@ namespace agarzonp
 
 		void OnGameObjectHit(GameObject* other) override
 		{
-			score++;
+			Invaderer* invaderer = static_cast<Invaderer*> (other);
+			if (invaderer->GetType().lives > 0)
+			{
+				score += 1;
+			}
+			else
+			{
+				score += invaderer->GetType().killScore;
+			}			
 		}
 
 	private:
