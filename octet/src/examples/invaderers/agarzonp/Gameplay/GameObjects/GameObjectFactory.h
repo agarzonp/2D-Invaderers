@@ -52,6 +52,7 @@ namespace agarzonp
 
 			GameObject* border = pool->GetBorder();
 			border->GetSprite().init(texture, 0.0f, -3.0f, 6, 0.2f);
+			border->GetSprite().setColor(octet::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 			border->AddShader(shader);
 
 			return border;
@@ -76,6 +77,7 @@ namespace agarzonp
 			GameObject* bomb = pool->GetBomb();
 			bomb->SetTriggerer(triggerer);
 			bomb->GetSprite().init(texture, 20, 0, 0.0625f, 0.25f);
+			bomb->GetSprite().setColor(octet::vec4(1.0f, 0.0f, 1.0f, 1.0f));
 			bomb->AddShader(shader);
 
 			return bomb;
@@ -87,6 +89,7 @@ namespace agarzonp
 
 			GameObject* player = pool->GetPlayer();
 			player->GetSprite().init(texture, 0, -2.75f, 0.25f, 0.25f);
+			player->GetSprite().setColor(octet::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 			player->AddShader(shader);
 
 			return player;
@@ -119,6 +122,7 @@ namespace agarzonp
 			Invaderer* invaderer = static_cast<Invaderer*> (pool->GetInvaderer());
 			invaderer->SetType(type);
 			invaderer->GetSprite().init(type.texture, x, y, width, height);
+			invaderer->GetSprite().setColor(type.color);
 			invaderer->AddShader(shader);
 
 			return invaderer;
@@ -135,18 +139,21 @@ namespace agarzonp
 					type.texture = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
 					type.killScore = size;
 					type.lives = size * size;
+					type.color = octet::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (strcmp(enemyType, "InvaderHard") == 0)
 				{
 					type.texture = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invadererHard.gif");
 					type.killScore = 1 * size + 10;
 					type.lives = size * size  * 2;
+					type.color = octet::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 				else
 				{
 					type.texture = octet::resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
 					type.killScore = size;
 					type.lives = size * size;
+					type.color = octet::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 				}
 
 				return type;

@@ -8,6 +8,7 @@ namespace agarzonp
 		int lives;
 		int killScore;
 		GLuint texture;
+		octet::vec4 color;
 	};
 
 	class Invaderer : public GameObject

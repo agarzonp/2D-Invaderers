@@ -38,6 +38,8 @@ namespace octet {
 
 		// true if this sprite is enabled.
 		bool enabled;
+
+		vec4 color;
 	public:
 		sprite() {
 			texture = 0;
@@ -51,6 +53,12 @@ namespace octet {
 			halfHeight = h * 0.5f;
 			texture = _texture;
 			enabled = true;
+			color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
+		void setColor(const vec4& color)
+		{
+			this->color = color;
 		}
 
 		void set(float x, float y, float w, float h) {
@@ -76,6 +84,12 @@ namespace octet {
 			// set up opengl to draw textured triangles using sampler 0 (GL_TEXTURE0)
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texture);
+
+			GLint uniformLocation = glGetUniformLocation(shader.get_program(), "color");
+			if (uniformLocation != -1)
+			{
+				glUniform4f(uniformLocation, color[0], color[1], color[2], color[3]);
+			}
 
 			// use "old skool" rendering
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
@@ -231,6 +245,12 @@ namespace octet
 		unsigned num_quads = font.build_mesh(bb, vertices, indices, max_quads, text, 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, font_texture);
+
+		GLint uniformLocation = glGetUniformLocation(shader.get_program(), "color");
+		if (uniformLocation != -1)
+		{
+			glUniform4f(uniformLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+		}
 
 		shader.render(modelToProjection, 0);
 
